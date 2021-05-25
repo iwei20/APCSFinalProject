@@ -30,4 +30,21 @@ public class Unit {
     s_alt = null;  
     }
   }
+  private float calcPower(Unit a, Unit b) {
+    if (!(a.index < 4) && b.airborne) {return 0;}
+    if (!canAttack) {return 0;}
+    int dist = abs(a.x - b.x) + abs(a.y - b.y);
+    if (dist < attackRangeMin || dist > attackRangeMax) {return 0;}
+    return 1;
+  }
+  public int attack(Unit other, Tile[][] map) {
+    float thisDef = 2 + map[this.y][this.x].getTerrain().defense / 1.75;
+    float othDef = 2 + map[other.y][other.x].getTerrain().defense /  1.75;
+    
+    float temp = other.health;
+    other.health -= 1.75 * calcPower(this,other) * this.health / othDef;
+    this.health -= calcPower(other,this) * temp / thisDef;
+    
+    return 0;
+  }
 }

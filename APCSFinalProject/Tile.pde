@@ -1,10 +1,11 @@
 public class Tile {
   private Terrain t;
-  private List<Tile> adjacents;
-  private List<TileSubobject> subobjects;
+  private ArrayList<Tile> adjacents;
+  private ArrayList<TileSubobject> subobjects;
+  boolean occupied;
   
-  public Tile() {
-    
+  public Tile(type t) {
+    t = new Terrain(t);
   }
   
   public Terrain getTerrain() {
@@ -19,7 +20,7 @@ public class Tile {
     return subobjects;
   }
   
-  public void render(int pos_x, int pos_y) {
+  public void render(int pos_x, int pos_y,int scale) {
     
   }
 }

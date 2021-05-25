@@ -18,7 +18,6 @@ class Sprite {
     Sprite s = new Sprite();
     s.dat = this.dat;
     s.transparency = this.transparency;
-    s.transparencyDisabled = this.transparencyDisabled;
     return s;
   }
   public void draw(int x, int y, int scale) {
