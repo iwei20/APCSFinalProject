@@ -5,4 +5,4 @@ A version of the GBA game Advance Wars using Processing. Advance wars is a turn-
 
 ### 5/25/2021
 - Ivan - Created initial project, copied all classes from UML, and created skeletons for Map, Tile, TileSubobject
-- Cameron - 
+- Cameron - created graphics for units, wrote Sprite and Terrain classes and started work on Unit class 
