@@ -15,6 +15,10 @@ public class Map {
     return c;
   }
   
+  public void shift(int dx, int dy) {
+    
+  }
+  
   public void render() {
     
   }
