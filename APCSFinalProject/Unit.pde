@@ -2,6 +2,7 @@ public class Unit {
   Sprite s,s_alt;
   int x,y;
   boolean alreadyMoved;
+  boolean facing; // true = left, false = right
   int team;
   int index;
   
@@ -17,6 +18,7 @@ public class Unit {
   public Unit(int init_x, int init_y, int type, int team) {
     this.x = init_x;
     this.y = init_y;
+    this.facing = false; 
     this.health = 10;
     this.index = type;
     this.team = team;
@@ -43,8 +45,20 @@ public class Unit {
     
     float temp = other.health;
     other.health -= 1.75 * calcPower(this,other) * this.health / othDef;
-    this.health -= calcPower(other,this) * temp / thisDef;
+    if (other.health > 0) {
+      this.health -= calcPower(other,this) * temp / thisDef;
+      if (this.health <= 0) {return -1;}
+    } else {
+      return 1; 
+    }
     
     return 0;
+  }
+  public void render() {
+    if (true) {
+      s.draw(scale*x,scale*y,scale,facing);
+    } else {
+      s_alt.draw(scale*x,scale*y,scale,facing);
+    }
   }
 }

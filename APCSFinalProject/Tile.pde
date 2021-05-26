@@ -4,23 +4,22 @@ public class Tile {
   private ArrayList<TileSubobject> subobjects;
   boolean occupied;
   
-  public Tile(type t) {
-    t = new Terrain(t);
+  public Tile(int type) {
+    t = new Terrain(type);
   }
   
   public Terrain getTerrain() {
     return t; 
   }
   
-  public List<Tile> getAdjacents() {
+  public ArrayList<Tile> getAdjacents() {
     return adjacents;
   }
   
-  public List<TileSubobject> getSubobjects() {
+  public ArrayList<TileSubobject> getSubobjects() {
     return subobjects;
   }
-  
-  public void render(int pos_x, int pos_y,int scale) {
-    
+  public void render(int pos_x, int pos_y) {
+    t.s.draw(pos_x*scale*16,pos_y*scale*16,scale);
   }
 }

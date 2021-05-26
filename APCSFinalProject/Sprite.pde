@@ -2,8 +2,8 @@ class Sprite {
   PImage dat;  
   boolean[] transparency;
   
-  private Sprite() {
-    
+  public Sprite(String path) {
+    shallowCopy(new Sprite(loadImage(path)),this); 
   }
   public Sprite(PImage img) {
     dat = new PImage(img.width,img.height);
@@ -14,16 +14,15 @@ class Sprite {
       transparency[i] = !(dat.pixels[i] == magenta); 
     }
   }
-  public Sprite shallowCopy() {
-    Sprite s = new Sprite();
-    s.dat = this.dat;
-    s.transparency = this.transparency;
-    return s;
+  private void shallowCopy(Sprite a, Sprite b) {
+    b.dat = a.dat;
+    b.transparency = a.transparency;
   }
   public void draw(int x, int y, int scale) {
     draw(x,y,scale,false); 
   }
   public void draw(int x,int y, int scale, boolean hFlip) {
+    //println(x + " " + y);
     for (int j = 0; j < dat.height; j++) {
       for (int i = 0; i < dat.width; i++) {
         if (transparency[hFlip ? ((j+1)*dat.width-i-1) : (j*dat.width+i)]) {
