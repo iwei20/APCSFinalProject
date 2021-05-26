@@ -1,4 +1,6 @@
 void parseInput() {
+  if (showRange != null) {keyCode = 'U';}
+  
   if (keyCode == 'W') { 
     m.getCursor().y = max(0,m.getCursor().y - 1);
   }
@@ -9,7 +11,9 @@ void parseInput() {
     m.getCursor().y = min(m.getHeight()-1,m.getCursor().y + 1);
   }
   if (keyCode == 'D') { 
-    m.getCursor().x = min(m.getWidth()-1,m.getCursor().x + 1);
+    if (showRange == null) {
+      m.getCursor().x = min(m.getWidth()-1,m.getCursor().x + 1);
+    }
   }
   if (keyCode == 'I')  {
     if (m.getCursor().selected == null && m.getTile(m.getCursor().x,m.getCursor().y).occupying != null && !m.getTile(m.getCursor().x,m.getCursor().y).occupying.takenAction) {
