@@ -1,6 +1,7 @@
 public class Unit {
   Sprite s,s_alt;
   int x,y;
+  int lastX, lastY;
   boolean alreadyMoved;
   boolean facing; // true = left, false = right
   int team;
@@ -11,17 +12,22 @@ public class Unit {
   int mvmtRange;
   int attackRangeMin, attackRangeMax;
   boolean canAttack;
+  boolean takenAction;
   boolean airborne;
   boolean isVehicle;
   boolean navalOnly;
   
-  public Unit(int init_x, int init_y, int type, int team) {
+  public Unit(Map m, int init_x, int init_y, int type, int team) {
     this.x = init_x;
     this.y = init_y;
+    this.lastX = -1;
+    this.lastY = -1;
+    m.board[y][x].occupying = this;
     this.facing = false; 
     this.health = 10;
     this.index = type;
     this.team = team;
+    this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 3 : 2) : 8);
     int spriteIndex = type;
     if (spriteIndex >= 4) {spriteIndex += 4;}
     spriteIndex += 4 * (max(0,spriteIndex - 16) / 4); 
@@ -39,9 +45,37 @@ public class Unit {
     if (dist < attackRangeMin || dist > attackRangeMax) {return 0;}
     return 1;
   }
-  public int attack(Unit other, Tile[][] map) {
-    float thisDef = 2 + map[this.y][this.x].getTerrain().defense / 1.75;
-    float othDef = 2 + map[other.y][other.x].getTerrain().defense /  1.75;
+  public void newTurn() {
+    this.lastX = -1;
+    this.lastY = -1;
+    this.takenAction = false;
+    if (false) {health = min(10,health+2);}
+  }
+  public void undoMove() {
+    x = lastX;
+    lastX = -1;
+    y = lastY;
+    lastY = -1;
+    this.takenAction = false;
+  }
+  public boolean move(int newX, int newY) {
+    if (takenAction || abs(this.x - newX) + abs(this.y - newY) > mvmtRange || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length)) {
+      return false;
+    } else {
+      m.board[y][x].occupying = null;
+      this.facing = newX < this.x;
+      this.lastX = this.x;
+      this.x = newX;
+      this.lastY = this.y;
+      this.y = newY;
+      m.board[y][x].occupying = this;
+      this.takenAction = true;
+      return true;
+    }
+  }
+  public int attack(Unit other) {
+    float thisDef = 2 + m.getTile(this.x,this.y).getTerrain().defense / 1.75;
+    float othDef = 2 + m.getTile(other.x,other.y).getTerrain().defense /  1.75;
     
     float temp = other.health;
     other.health -= 1.75 * calcPower(this,other) * this.health / othDef;
@@ -54,11 +88,47 @@ public class Unit {
     
     return 0;
   }
+  public void displayRange(boolean tint) {
+    noStroke();
+    if (tint) {
+      switch(team) {
+        case 0:
+          fill(255,0,0,75);
+          break;
+        case 1:
+          fill(0,120,0,75);
+          break;
+        case 2:
+          fill(0,0,255,75);
+          break;
+        case 3:
+          fill(255,255,0,75);
+          break;
+        case 4:
+          fill(128,128,128,75);
+          break;
+      }
+    } else {
+      fill(0,180,0,75);  
+    }
+    for (int j = max(0,y-mvmtRange); j <= min(m.board.length-1,y+mvmtRange); j++) {
+      for (int i = max(0,x-mvmtRange); i <= min(m.board[0].length-1,x+mvmtRange); i++) {
+        if(abs(j-y) + abs(i-x) <= mvmtRange) {
+            rect(scale*i*16,scale*j*16,scale*16,scale*16);
+            if (i == x && y == j) {render();}
+            //println("rect("+scale*i*16+"," +scale*j*16+"," +scale*16 +"," +scale*16+")");
+        }
+      }
+    }
+  }
   public void render() {
     if (true) {
-      s.draw(scale*x,scale*y,scale,facing);
+      s.draw(scale*x*16,scale*y*16,scale,facing,takenAction ? .8 : 1);
     } else {
-      s_alt.draw(scale*x,scale*y,scale,facing);
+      s_alt.draw(scale*x*16,scale*y*16,scale,facing,takenAction ? .8 : 1);
+    }
+    if (round(health) < 10) {
+      healthIcons[round(health)-1].draw(scale*x+8*scale,scale*y+9*scale,scale);
     }
   }
 }
