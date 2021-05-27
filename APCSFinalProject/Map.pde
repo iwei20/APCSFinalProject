@@ -48,6 +48,7 @@ public class Map {
       eUnits.add(new Unit(this,data[l],data[l+1],data[l+2],0));
     }
     l++;
+    board[c.y][c.x].c = c;
   }
   public void nextTurn() {
     whoseTurn = (whoseTurn == 0 ? 1 : 0);
@@ -75,6 +76,14 @@ public class Map {
     return c;
   }
   
+  public void moveCursor(int dx, int dy) {
+    board[c.y][c.x].c = null;
+    c.y += dy;
+    c.x += dx;
+    board[c.y][c.x].c = c;
+    
+  }
+  
   public void shift(int dx, int dy) {
     top_view += dy;
     left_view += dx;
@@ -88,6 +97,6 @@ public class Map {
       }  
     }
     //"sprites"
-    c.render(true);
+    board[c.y][c.x].c.render(true, c.x + left_view, c.y + top_view);
   }
 }

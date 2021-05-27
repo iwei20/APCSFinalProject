@@ -7,7 +7,7 @@ void parseInput() {
         m.getCursor().y = 0;
         m.shift(0, 1);
       } else {
-        m.getCursor().y--;
+        m.moveCursor(0, -1);
       }
     }
   }
@@ -17,7 +17,7 @@ void parseInput() {
         m.getCursor().x = 0;
         m.shift(1, 0);
       } else {
-        m.getCursor().x--;
+        m.moveCursor(-1, 0);
       }
     }
   }
@@ -27,7 +27,7 @@ void parseInput() {
         m.getCursor().y = m.board.length-1;
         m.shift(0, -1);
       } else {
-        m.getCursor().y++;
+        m.moveCursor(0, 1);
       }
     }
   }
@@ -37,7 +37,7 @@ void parseInput() {
         m.getCursor().x = m.board[0].length-1;
         m.shift(-1, 0);
       } else {
-        m.getCursor().x++;
+        m.moveCursor(1, 0);
       }
     }
   }
