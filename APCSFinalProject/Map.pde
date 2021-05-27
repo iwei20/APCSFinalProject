@@ -84,9 +84,9 @@ public class Map {
   
   public void render() {
     //background
-    for (int j = top_view; j < bot_view && j < board.length; j++) {
-      for (int i = left_view; i < right_view && i < board[0].length; i++) {
-        board[j][i].render(i,j);
+    for (int j = 0; j < board.length; j++) {
+      for (int i = 0; i < board[0].length; i++) {
+        board[j][i].render(i + left_view,j + top_view);
       }  
     }
     //"sprites"
