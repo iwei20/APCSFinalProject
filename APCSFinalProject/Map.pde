@@ -10,8 +10,8 @@ public class Map {
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     whoseTurn = 0;
-    top_view = 0; bot_view = 0; left_view = 0; right_view = 0;
     board = new Tile[cols][rows];
+    top_view = 0; bot_view = board.length; left_view = 0; right_view = board[0].length;
   }
   /* 
   Map data format: 
@@ -26,8 +26,8 @@ public class Map {
     whoseTurn = 0;
     pUnits = new ArrayList();
     eUnits = new ArrayList();
-    top_view = 0; bot_view = 0; left_view = 0; right_view = 0;
     board = new Tile[data[0]][data[1]];
+    top_view = 0; bot_view = board.length; left_view = 0; right_view = board[0].length;
     int l;
     for (l = 2; data[l] != -128; l += 3) {}
     l++;
@@ -76,13 +76,16 @@ public class Map {
   }
   
   public void shift(int dx, int dy) {
-    
+    top_view += dy;
+    bot_view += dy;
+    left_view += dx;
+    right_view += dx;
   }
   
   public void render() {
     //background
-    for (int j = 0; j < board.length; j++) {
-      for (int i = 0; i < board[0].length; i++) {
+    for (int j = top_view; j < bot_view && j < board.length; j++) {
+      for (int i = left_view; i < right_view && i < board[0].length; i++) {
         board[j][i].render(i,j);
       }  
     }
