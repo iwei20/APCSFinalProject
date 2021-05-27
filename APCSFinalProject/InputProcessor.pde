@@ -3,7 +3,8 @@ void parseInput() {
   
   if (keyCode == 'W') { 
     if (showRange == null) {
-      if(m.getCursor().y == 0) {
+      if(m.getCursor().y <= 0) {
+        m.getCursor().y = 0;
         m.shift(0, 1);
       } else {
         m.getCursor().y--;
@@ -12,7 +13,8 @@ void parseInput() {
   }
   if (keyCode == 'A') { 
     if (showRange == null) {
-      if(m.getCursor().x == 0) {
+      if(m.getCursor().x <= 0) {
+        m.getCursor().x = 0;
         m.shift(1, 0);
       } else {
         m.getCursor().x--;
@@ -21,7 +23,8 @@ void parseInput() {
   }
   if (keyCode == 'S') { 
     if (showRange == null) {
-      if(m.getCursor().y == m.board.length - 1) {
+      if(m.getCursor().y >= m.board.length - 1) {
+        m.getCursor().y = m.board.length-1;
         m.shift(0, -1);
       } else {
         m.getCursor().y++;
@@ -30,7 +33,8 @@ void parseInput() {
   }
   if (keyCode == 'D') { 
     if (showRange == null) {
-        if(m.getCursor().y == m.board.length - 1) {
+      if(m.getCursor().x >= m.board[0].length - 1) {
+        m.getCursor().x = m.board[0].length-1;
         m.shift(-1, 0);
       } else {
         m.getCursor().x++;
