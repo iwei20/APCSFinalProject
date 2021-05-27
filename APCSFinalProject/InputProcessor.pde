@@ -2,17 +2,39 @@ void parseInput() {
   if (showRange != null) {keyCode = 'U';}
   
   if (keyCode == 'W') { 
-    m.getCursor().y = max(0,m.getCursor().y - 1);
+    if (showRange == null) {
+      if(m.getCursor().y == 0) {
+        m.shift(0, 1);
+      } else {
+        m.getCursor().y--;
+      }
+    }
   }
   if (keyCode == 'A') { 
-    m.getCursor().x = max(0,m.getCursor().x - 1);
+    if (showRange == null) {
+      if(m.getCursor().x == 0) {
+        m.shift(1, 0);
+      } else {
+        m.getCursor().x--;
+      }
+    }
   }
   if (keyCode == 'S') { 
-    m.getCursor().y = min(m.getHeight()-1,m.getCursor().y + 1);
+    if (showRange == null) {
+      if(m.getCursor().y == m.board.length - 1) {
+        m.shift(0, -1);
+      } else {
+        m.getCursor().y++;
+      }
+    }
   }
   if (keyCode == 'D') { 
     if (showRange == null) {
-      m.getCursor().x = min(m.getWidth()-1,m.getCursor().x + 1);
+        if(m.getCursor().y == m.board.length - 1) {
+        m.shift(-1, 0);
+      } else {
+        m.getCursor().x++;
+      }
     }
   }
   if (keyCode == 'I')  {
