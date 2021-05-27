@@ -27,7 +27,7 @@ public class Map {
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     board = new Tile[data[0]][data[1]];
-    top_view = 0; bot_view = board.length; left_view = 0; right_view = board[0].length;
+    top_view = 0; left_view = 0;
     int l;
     for (l = 2; data[l] != -128; l += 3) {}
     l++;
@@ -77,9 +77,7 @@ public class Map {
   
   public void shift(int dx, int dy) {
     top_view += dy;
-    bot_view += dy;
     left_view += dx;
-    right_view += dx;
   }
   
   public void render() {
