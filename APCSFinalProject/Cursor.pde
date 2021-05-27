@@ -16,9 +16,9 @@ class Cursor {
     }
     selected = null;
   }
-  void render(boolean t) {
+  void render(boolean t, int pos_x, int pos_y) {
     if (selected != null) {selected.displayRange(false);}
-    s[frame/15].draw((-3 * scale)+x*scale*16,(-4 * scale)+y*scale*16,scale,false);   
+    s[frame/15].draw((-3 * scale)+pos_x*scale*16,(-4 * scale)+pos_y*scale*16,scale,false);   
     if (t) {frame = (frame + 2) % 60;}
   }
 }

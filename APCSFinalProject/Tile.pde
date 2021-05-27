@@ -1,6 +1,7 @@
 public class Tile {
   Terrain t;
   Unit occupying;
+  Cursor c;
   
   public Tile(int type) {
     t = new Terrain(type);
