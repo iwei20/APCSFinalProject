@@ -46,23 +46,27 @@ void parseInput() {
       m.getCursor().selected = m.getTile(m.getCursor().x,m.getCursor().y).occupying;
       m.getCursor().storex = m.getCursor().x;
       m.getCursor().storey = m.getCursor().y;
+      m.getCursor().Iactive = true;
     } else if (m.getCursor().selected != null) {
       if(m.getCursor().selected.move(m.getCursor().x,m.getCursor().y)) {
         m.getCursor().selected = null; 
+        m.getCursor().Iactive = false;
       }
     }
   }
   if (keyCode == 'U') {
-    if (m.getCursor().selected != null) {
-      m.getCursor().selected = null;
-      m.getCursor().x = m.getCursor().storex;
-      m.getCursor().y = m.getCursor().storey;
-    } else {
-      if (m.getTile(m.getCursor().x,m.getCursor().y).occupying != null) {
-        showRange = m.getTile(m.getCursor().x,m.getCursor().y).occupying;
+    if(!m.getCursor().Iactive) {
+      if (m.getCursor().selected != null) {
+        m.getCursor().selected = null;
+        m.getCursor().x = m.getCursor().storex;
+        m.getCursor().y = m.getCursor().storey;
+      } else {
+        if (m.getTile(m.getCursor().x,m.getCursor().y).occupying != null) {
+          showRange = m.getTile(m.getCursor().x,m.getCursor().y).occupying;
+        }
       }
+    } else {
+      showRange = null; 
     }
-  } else {
-    showRange = null; 
   }
 }
