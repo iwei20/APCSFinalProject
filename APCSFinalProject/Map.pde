@@ -1,5 +1,5 @@
 public class Map {
-  private int top_view, bot_view, left_view, right_view;
+  private int top_view, left_view;
   private Cursor c;
   int whoseTurn;
   Tile[][] board;
@@ -11,7 +11,7 @@ public class Map {
     eUnits = new ArrayList();
     whoseTurn = 0;
     board = new Tile[cols][rows];
-    top_view = 0; bot_view = board.length; left_view = 0; right_view = board[0].length;
+    top_view = 0; left_view = 0;
   }
   /* 
   Map data format: 
