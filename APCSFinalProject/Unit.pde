@@ -113,15 +113,26 @@ public class Unit {
     }
     for (int j = max(0,y-mvmtRange); j <= min(m.board.length-1,y+mvmtRange); j++) {
       for (int i = max(0,x-mvmtRange); i <= min(m.board[0].length-1,x+mvmtRange); i++) {
-        if(abs(j-y) + abs(i-x) <= mvmtRange) {
+        if(checkMvmtRange_rec(i,j,0,false)) {
             rect(scale*i*16,scale*j*16,scale*16,scale*16);
-            if (i == x && y == j) {render();}
+            if (i == x && y == j) {render(x,y);}
             //println("rect("+scale*i*16+"," +scale*j*16+"," +scale*16 +"," +scale*16+")");
         }
       }
     }
   }
-  public void render() {
+  private boolean checkMvmtRange_rec(int tx, int ty, int steps, boolean add) {
+    if (tx == x && ty == y) {return true;}
+    if (tx < 0 || tx >= m.board.length || ty < 0 || ty >= m.board[0].length) {return false;}
+    Terrain t = m.board[ty][tx].getTerrain();
+    if (navalOnly && t.wet == false) {return false;}
+    if (t.ocean && !airborne && !navalOnly) {return false;}
+    if (isVehicle && !airborne && !t.drivable) {return false;}
+    if (add) {steps += t.drivable ? 1 : 2;}
+    if (steps >= mvmtRange) {return false;}
+    return checkMvmtRange_rec(tx+1,ty,steps,true) || checkMvmtRange_rec(tx-1,ty,steps,true) || checkMvmtRange_rec(tx,ty-1,steps,true) || checkMvmtRange_rec(tx,ty+1,steps,true);
+  }
+  public void render(int x, int y) {
     if (true) {
       s.draw(scale*x*16,scale*y*16,scale,facing,takenAction ? .8 : 1);
     } else {

@@ -17,6 +17,7 @@ void draw() {
   m.render();
   if (showRange != null) {
     showRange.displayRange(true);
+    m.getCursor().render(false);
   }
 }
 

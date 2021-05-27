@@ -87,8 +87,6 @@ public class Map {
       }  
     }
     //"sprites"
-    for (int i = 0; i < pUnits.size(); i++) {pUnits.get(i).render();}
-    for (int i = 0; i < eUnits.size(); i++) {eUnits.get(i).render();}
-    c.render();
+    c.render(true);
   }
 }
