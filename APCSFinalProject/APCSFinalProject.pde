@@ -9,7 +9,7 @@ void setup() {
   for (int i = 0; i < healthIcons.length; i++) {
     healthIcons[i] = new Sprite("icons/" + (i+1) + ".png");
   }
-  m = new Map(new byte[]{3,3,0,0,3,-128,-128,6,6,6,4,4,4,3,3,3}); 
+  m = new Map(new byte[]{3,3,0,2,3,0,0,3,0,1,0,-128,-128,6,6,6,4,4,4,3,3,3}); 
 }
 
 void draw() {

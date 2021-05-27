@@ -22,7 +22,13 @@ class Sprite {
     draw(x,y,scale,false); 
   }
   public void draw(int x,int y, int scale, boolean hFlip) {
-    //println(x + " " + y);
+    draw(x,y,scale,hFlip,false);
+  }
+  public void draw(int x,int y, int scale, boolean hFlip, boolean shift) {
+    if (shift) {
+      x += m.left_view*scale;
+      y += m.top_view*scale;
+    }
     for (int j = 0; j < dat.height; j++) {
       for (int i = 0; i < dat.width; i++) {
         if (transparency[hFlip ? ((j+1)*dat.width-i-1) : (j*dat.width+i)]) {
@@ -37,6 +43,13 @@ class Sprite {
     }
   }
   public void draw(int x,int y, int scale, boolean hFlip, float shadeFactor) {
+    draw(x,y,scale,hFlip,shadeFactor,true);
+  }
+  public void draw(int x,int y, int scale, boolean hFlip, float shadeFactor, boolean shift) {
+    if (shift) {
+      x += m.left_view*scale*16;
+      y += m.top_view*scale*16;
+    }
     if (shadeFactor >= .99) {
       draw(x,y,scale,hFlip);
       return;  

@@ -12,6 +12,7 @@ public class Unit {
   int mvmtRange;
   int attackRangeMin, attackRangeMax;
   boolean canAttack;
+  boolean stationary;
   boolean takenAction;
   boolean airborne;
   boolean isVehicle;
@@ -28,6 +29,12 @@ public class Unit {
     this.index = type;
     this.team = team;
     this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 3 : 2) : 8);
+    this.airborne = index >= 16 && index <= 19;
+    this.isVehicle = index == 0 || (index >= 8 && index <= 14);
+    this.stationary = index == 12;
+    this.canAttack = !(index == 0 || index == 16);
+    this.navalOnly = index >= 24;
+    
     int spriteIndex = type;
     if (spriteIndex >= 4) {spriteIndex += 4;}
     spriteIndex += 4 * (max(0,spriteIndex - 16) / 4); 
@@ -59,7 +66,8 @@ public class Unit {
     this.takenAction = false;
   }
   public boolean move(int newX, int newY) {
-    if (takenAction || abs(this.x - newX) + abs(this.y - newY) > mvmtRange || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length)) {
+    if (stationary) {return false;}
+    if (takenAction || !checkMvmtRange_rec(newX,newY,0,false) || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length)) {
       return false;
     } else {
       m.board[y][x].occupying = null;
@@ -115,7 +123,7 @@ public class Unit {
       for (int i = max(0,x-mvmtRange); i <= min(m.board[0].length-1,x+mvmtRange); i++) {
         if(checkMvmtRange_rec(i,j,0,false)) {
             rect(scale*i*16,scale*j*16,scale*16,scale*16);
-            if (i == x && y == j) {render(x,y);}
+            if (i == x && y == j) {render();}
             //println("rect("+scale*i*16+"," +scale*j*16+"," +scale*16 +"," +scale*16+")");
         }
       }
@@ -132,7 +140,7 @@ public class Unit {
     if (steps >= mvmtRange) {return false;}
     return checkMvmtRange_rec(tx+1,ty,steps,true) || checkMvmtRange_rec(tx-1,ty,steps,true) || checkMvmtRange_rec(tx,ty-1,steps,true) || checkMvmtRange_rec(tx,ty+1,steps,true);
   }
-  public void render(int x, int y) {
+  public void render() {
     if (true) {
       s.draw(scale*x*16,scale*y*16,scale,facing,takenAction ? .8 : 1);
     } else {

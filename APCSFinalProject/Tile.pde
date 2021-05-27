@@ -10,8 +10,14 @@ public class Tile {
   public Terrain getTerrain() {
     return t; 
   }
-  public void render(int pos_x, int pos_y) {
-    t.s.draw(pos_x*scale*16,pos_y*scale*16,scale);
-    if (occupying != null) {occupying.render(pos_x,pos_y);}
+  public void render(int pos_x, int pos_y,int layer) {
+    switch (layer) {
+      case 0:
+        t.s.draw(pos_x*scale*16,pos_y*scale*16,scale);
+        break;
+      case 1: 
+        if (occupying != null) {occupying.render();}
+        break;
+    }
   }
 }
