@@ -5,7 +5,6 @@ class Cursor {
   Sprite[] s;
   int frame;
   Unit selected;
-  boolean Iactive;
   
   public Cursor() {
     x = 0;
@@ -16,10 +15,9 @@ class Cursor {
       s[i] = new Sprite("Cursor" + i + ".png");
     }
     selected = null;
-    Iactive = false;
   }
   void render(boolean t, int pos_x, int pos_y) {
-    if (selected != null) {selected.displayRange(false);}
+    if (selected != null) {selected.displayRange(false,false);}
     s[frame/15].draw((-3 * scale)+pos_x*scale*16,(-4 * scale)+pos_y*scale*16,scale,false);   
     if (t) {frame = (frame + 2) % 60;}
   }
