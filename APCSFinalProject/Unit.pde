@@ -2,8 +2,6 @@ public class Unit {
   Sprite s,s_alt;
   int x,y;
   int lastX, lastY;
-  boolean alreadyMoved;
-  boolean facing; // true = left, false = right
   int team;
   int index;
   
@@ -12,6 +10,7 @@ public class Unit {
   int mvmtRange;
   int attackRangeMin, attackRangeMax;
   boolean canAttack;
+  boolean canAttackAndMove;
   boolean stationary;
   boolean takenAction;
   boolean airborne;
@@ -24,15 +23,17 @@ public class Unit {
     this.lastX = -1;
     this.lastY = -1;
     m.board[y][x].occupying = this;
-    this.facing = false; 
     this.health = 10;
     this.index = type;
     this.team = team;
     this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 3 : 2) : 8);
+    this.attackRangeMin = (index >= 12 && index <= 14) ? (index == 14 ? 2 : 3) : 0;
+    this.attackRangeMax = (index >= 12 && index <= 14) ? (index == 14 ? 3 : 5) : 1;
     this.airborne = index >= 16 && index <= 19;
     this.isVehicle = index == 0 || (index >= 8 && index <= 14);
     this.stationary = index == 12;
     this.canAttack = !(index == 0 || index == 16);
+    this.canAttackAndMove = !(index == 8 || index == 9 || (index >= 12 && index <= 14));
     this.navalOnly = index >= 24;
     
     int spriteIndex = type;
@@ -63,23 +64,24 @@ public class Unit {
     lastX = -1;
     y = lastY;
     lastY = -1;
-    this.takenAction = false;
   }
   public boolean move(int newX, int newY) {
     if (stationary) {return false;}
-    if (takenAction || !checkMvmtRange_rec(newX,newY,0,false) || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length)) {
+    if ((newX != x || newY != y) && (takenAction || !checkMvmtRange_rec(newX,newY,0,mvmtRange,false,true) || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length))) {
       return false;
     } else {
       m.board[y][x].occupying = null;
-      this.facing = newX < this.x;
       this.lastX = this.x;
       this.x = newX;
       this.lastY = this.y;
       this.y = newY;
       m.board[y][x].occupying = this;
-      this.takenAction = true;
+      //this.takenAction = true;
       return true;
     }
+  }
+  public void setActionTaken() {
+    takenAction = true;  
   }
   public int attack(Unit other) {
     float thisDef = 2 + m.getTile(this.x,this.y).getTerrain().defense / 1.75;
@@ -96,7 +98,7 @@ public class Unit {
     
     return 0;
   }
-  public void displayRange(boolean tint) {
+  public void displayRange(boolean tint, boolean attack) {
     noStroke();
     if (tint) {
       switch(team) {
@@ -119,35 +121,37 @@ public class Unit {
     } else {
       fill(0,180,0,75);  
     }
-    for (int j = max(0,y-mvmtRange); j <= min(m.board.length-1,y+mvmtRange); j++) {
-      for (int i = max(0,x-mvmtRange); i <= min(m.board[0].length-1,x+mvmtRange); i++) {
-        if(checkMvmtRange_rec(i,j,0,false)) {
-            rect(scale*i*16,scale*j*16,scale*16,scale*16);
+    for (int j = max(0,y-mvmtRange-attackRangeMax); j <= min(m.board.length-1,y+mvmtRange+attackRangeMax); j++) {
+      for (int i = max(0,x-mvmtRange-attackRangeMax); i <= min(m.board[0].length-1,x+mvmtRange+attackRangeMax); i++) {
+        if((!attack && checkMvmtRange_rec(i,j,0,mvmtRange,false,true)) || (attack && canAttack && (canAttackAndMove ? checkMvmtRange_rec(i,j,0,mvmtRange+1,false,false) : false))) {
+            rect(scale*(i+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
             if (i == x && y == j) {render();}
             //println("rect("+scale*i*16+"," +scale*j*16+"," +scale*16 +"," +scale*16+")");
         }
       }
     }
   }
-  private boolean checkMvmtRange_rec(int tx, int ty, int steps, boolean add) {
-    if (tx == x && ty == y) {return true;}
+  private boolean checkMvmtRange_rec(int tx, int ty, int steps, int maxSteps, boolean add, boolean checkTerrain) {
+    if (!checkTerrain && tx == x && ty == y) {return true;}
     if (tx < 0 || tx >= m.board.length || ty < 0 || ty >= m.board[0].length) {return false;}
     Terrain t = m.board[ty][tx].getTerrain();
     if (navalOnly && t.wet == false) {return false;}
     if (t.ocean && !airborne && !navalOnly) {return false;}
     if (isVehicle && !airborne && !t.drivable) {return false;}
+    if (tx == x && ty == y) {return true;}
     if (add) {steps += t.drivable ? 1 : 2;}
-    if (steps >= mvmtRange) {return false;}
-    return checkMvmtRange_rec(tx+1,ty,steps,true) || checkMvmtRange_rec(tx-1,ty,steps,true) || checkMvmtRange_rec(tx,ty-1,steps,true) || checkMvmtRange_rec(tx,ty+1,steps,true);
+    if (steps >= maxSteps) {return false;}
+    return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,true,checkTerrain) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,true,checkTerrain) || 
+    checkMvmtRange_rec(tx,ty-1,steps,maxSteps,true,checkTerrain) || checkMvmtRange_rec(tx,ty+1,steps,maxSteps,true,checkTerrain);
   }
   public void render() {
     if (true) {
-      s.draw(scale*x*16,scale*y*16,scale,facing,takenAction ? .8 : 1);
+      s.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
     } else {
-      s_alt.draw(scale*x*16,scale*y*16,scale,facing,takenAction ? .8 : 1);
+      s_alt.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
     }
-    if (round(health) < 10) {
-      healthIcons[round(health)-1].draw(scale*x+8*scale,scale*y+9*scale,scale);
+    if (ceil(health) < 10) {
+      healthIcons[ceil(health)-1].draw(scale*x+8*scale,scale*y+9*scale,scale);
     }
   }
 }
