@@ -1,6 +1,7 @@
 public class Map {
   int top_view, left_view;
   private Cursor c;
+  MenuOption combatMenu;
   int whoseTurn;
   Tile[][] board;
   private ArrayList<Unit> pUnits, eUnits;
@@ -46,10 +47,9 @@ public class Map {
     }
     l++;
     for (; data[l] != -128; l += 3) {
-      eUnits.add(new Unit(this,data[l],data[l+1],data[l+2],0));
+      eUnits.add(new Unit(this,data[l],data[l+1],data[l+2],2));
     }
     l++;
-    board[c.y][c.x].c = c;
   }
   public void nextTurn() {
     whoseTurn = (whoseTurn == 0 ? 1 : 0);
@@ -78,16 +78,13 @@ public class Map {
   }
   
   public void moveCursor(int dx, int dy) {
-    board[c.y][c.x].c = null;
     c.y += dy;
     c.x += dx;
-    board[c.y][c.x].c = c;
-    
   }
   
   public void shift(int dx, int dy) {
-    top_view += dy;
-    left_view += dx;
+    top_view = min(top_view+dy,0);
+    left_view = min(left_view+dx,0);
   }
   
   public void render() {
@@ -100,6 +97,7 @@ public class Map {
       }
     }
     //"sprites"
-    board[c.y][c.x].c.render(true, c.x + left_view, c.y + top_view);
+    if (!inCombatMenu && c != null) {c.render(true, c.x + left_view, c.y + top_view);}
+    if (inCombatMenu && combatMenu != null) {combatMenu.render();}
   }
 }
