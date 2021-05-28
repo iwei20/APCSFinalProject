@@ -8,6 +8,13 @@ public class Terrain {
   public Terrain(int index) {
     s = new Sprite(new PImage(16,16));
     switch(index) {
+      case -1: // reef
+        drivable = false;
+        ocean = true;
+        wet = true;
+        defense = 0;
+        s = new Sprite("tiles/Reef.png");
+        break;
       case 0: // ocean
         drivable = false;
         ocean = true;
