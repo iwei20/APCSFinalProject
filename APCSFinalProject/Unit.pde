@@ -9,6 +9,7 @@ public class Unit {
   float health;
   int mvmtRange;
   int attackRangeMin, attackRangeMax;
+  int unitsCanTransport;
   boolean canAttack;
   boolean canAttackAndMove;
   boolean stationary;
@@ -34,6 +35,7 @@ public class Unit {
     this.stationary = index == 12;
     this.canAttack = !(index == 0 || index == 16);
     this.canAttackAndMove = !(index == 8 || index == 9 || (index >= 12 && index <= 14));
+    this.unitsCanTransport = (index == 0 || index == 16 || index == 24) ? (index == 24 ? 2 : 1) : 0;   
     this.navalOnly = index >= 24;
     
     int spriteIndex = type;
@@ -43,13 +45,6 @@ public class Unit {
     } else {
     s_alt = null;  
     }
-  }
-  private float calcPower(Unit a, Unit b) {
-    if (!(a.index < 4) && b.airborne) {return 0;}
-    if (!canAttack) {return 0;}
-    int dist = abs(a.x - b.x) + abs(a.y - b.y);
-    if (dist < attackRangeMin || dist > attackRangeMax) {return 0;}
-    return 1;
   }
   public void newTurn() {
     this.lastX = -1;
@@ -83,15 +78,25 @@ public class Unit {
   public void setActionTaken() {
     takenAction = true;  
   }
+  private float calcPower(Unit a, Unit b) {
+    if (!(attackRangeMin != 0 && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMin-1,false,false,false)) && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMax,false,false,false)) {   
+      /* this should do calculations */
+      float t = damageChart[b.index][a.index] * a.health * .1;
+      if (t <= 0) {return 0;}
+      return .1 * (t - (b.airborne ? 0 : m.board[b.y][b.x].getTerrain().defense) * (t * .1));
+    } else {
+      return 0;
+    }
+  }
   public float attack(Unit other) {
-    float thisDef = 2 + m.getTile(this.x,this.y).getTerrain().defense / 1.75;
-    float othDef = 2 + m.getTile(other.x,other.y).getTerrain().defense /  1.75;
+    float thisPower = calcPower(this,other) * 1.3;
+    float otherPower = calcPower(other,this);
+    println(thisPower);
+    println(otherPower);
     
-    float temp = other.health;
-    float thisPower = calcPower(this,other);
-    other.health -= 1.75 * thisPower * this.health / othDef;
+    other.health -= thisPower;
     if (other.health > 0) {
-      this.health -= calcPower(other,this) * temp / thisDef;
+      this.health -= otherPower;
     } 
     
     return thisPower;
@@ -147,6 +152,7 @@ public class Unit {
   }
   public ArrayList<Unit> checkUnitsInRange() {
     ArrayList<Unit> yesunits = new ArrayList();  
+    if (!canAttack) {return yesunits;}
     if (!canAttackAndMove && (lastX != x || lastY != y)) {return yesunits;}
     for (int j = max(0,y-attackRangeMax); j <= min(m.board.length-1,y+attackRangeMax); j++) {
       for (int i = max(0,x-attackRangeMax); i <= min(m.board[0].length-1,x+attackRangeMax); i++) {
@@ -166,7 +172,7 @@ public class Unit {
         s_alt.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
       }
       if (ceil(health) < 10) {
-        healthIcons[ceil(health)-1].draw(scale*x*16+8*scale,scale*y*16+9*scale,scale);
+        healthIcons[ceil(health)-1].draw(scale*x*16+8*scale,scale*y*16+9*scale,scale,false,true);
       }
     } else {
       //destroy unit 

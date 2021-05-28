@@ -26,8 +26,8 @@ class Sprite {
   }
   public void draw(int x,int y, int scale, boolean hFlip, boolean shift) {
     if (shift) {
-      x += m.left_view*scale;
-      y += m.top_view*scale;
+      x += m.left_view*scale*16;
+      y += m.top_view*scale*16;
     }
     for (int j = 0; j < dat.height; j++) {
       for (int i = 0; i < dat.width; i++) {
