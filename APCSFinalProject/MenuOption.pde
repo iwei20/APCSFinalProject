@@ -46,10 +46,12 @@ class MenuOption {
   }
   
   public void moveCursorDown() {
-    cursor_y = min(options.length-1,cursor_y+1);
+    cursor_y++;
+    if(cursor_y >= options.length) cursor_y = 0;
   }
   public void moveCursorUp() {
-    cursor_y = max(0,cursor_y-1);
+    cursor_y--;
+    if(cursor_y <= -1) cursor_y = options.length - 1;
   }
   public String getOption() {
     return options[cursor_y];  
