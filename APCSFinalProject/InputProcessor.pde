@@ -12,7 +12,9 @@ void parseInput() {
       }
       /* doesnt work fully */
       if (keyCode == 'U') {
-        m.getCursor().selected.undoMove();
+        if (m.getCursor().selected != null) {
+          m.getCursor().selected.undoMove();
+        }
         inCombatMenu = false;
       }
       if (keyCode == 'I') {
@@ -24,10 +26,21 @@ void parseInput() {
           case "Fire":
             m.combatMenu.initSelection(possibleAttacks);
             break;
+          case "Unit":
+          case "Save":
+          case "Options":
+            break;
+          case "End":
+            //selectedAction = null;
+            //m.getCursor().selected = null; 
+            inCombatMenu = false;
+            m.nextTurn();
+            break; //<>//
+            
         }
         if (selectedAction.equals("Wait")) {
           selectedAction = null;
-          m.getCursor().selected.setActionTaken();
+          if (m.getCursor().selected != null) {m.getCursor().selected.setActionTaken();}
           m.getCursor().selected = null; 
           inCombatMenu = false;
         }
@@ -98,22 +111,27 @@ void parseInput() {
       }
     }
     if (keyCode == 'I')  {
-      if (m.getCursor().selected == null && m.getTile(m.getCursor().x,m.getCursor().y).occupying != null  && !m.getTile(m.getCursor().x,m.getCursor().y).occupying.takenAction) {
-        m.getCursor().selected = m.getTile(m.getCursor().x,m.getCursor().y).occupying;
-        m.getCursor().storex = m.getCursor().x;
-        m.getCursor().storey = m.getCursor().y;
-      } else if (m.getCursor().selected != null && m.getCursor().selected.team == m.whoseTurn) {
+      if (m.getCursor().selected == null) {
+        if (m.getTile(m.getCursor().x,m.getCursor().y).occupying == null) {
+          inCombatMenu = true;
+          m.combatMenu = new MenuOption(new String[]{"Unit","Save","Options","End"},"GUI/MainMenu.png");
+        } else if (!m.getTile(m.getCursor().x,m.getCursor().y).occupying.takenAction && m.getTile(m.getCursor().x,m.getCursor().y).occupying.exploding == -1) {
+          m.getCursor().selected = m.getTile(m.getCursor().x,m.getCursor().y).occupying;
+          m.getCursor().storex = m.getCursor().x;
+          m.getCursor().storey = m.getCursor().y;
+        }
+      } else if (/*m.getCursor().selected != null && */m.getCursor().selected.team == m.whoseTurn) {
         if(m.getCursor().selected.move(m.getCursor().x,m.getCursor().y)) {
           inCombatMenu = true;
           possibleAttacks = m.getCursor().selected.checkUnitsInRange();
-          m.combatMenu = new MenuOption(possibleAttacks.size() > 0,false,false); //<>//
+          m.combatMenu = new MenuOption(possibleAttacks.size() > 0,false,false);
           //m.getCursor().selected = null; 
           //m.getCursor().Iactive = false;
         }
       }
     }
     if (keyCode == 'U') {
-      if (m.getCursor().selected != null) { //<>//
+      if (m.getCursor().selected != null) {
         m.getCursor().selected = null;
         m.getCursor().x = m.getCursor().storex;
         m.getCursor().y = m.getCursor().storey;
