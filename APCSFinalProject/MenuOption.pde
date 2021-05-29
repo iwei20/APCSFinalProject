@@ -34,8 +34,8 @@ class MenuOption {
     unit_cursor = null;
     unitTargets = null;
     
-    render_x = width/16;   render_y = width/16;
-    c_render_x = width/16-4*scale; c_render_y = width/16+10*scale;
+    render_x = width/32;   render_y = width/24;
+    c_render_x = width/32-7*scale; c_render_y = width/24+10*scale;
     cursor_y = 0;
     cursor = new MenuCursor();
     s = new Sprite(filepath);
