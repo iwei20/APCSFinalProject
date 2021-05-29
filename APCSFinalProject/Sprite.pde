@@ -6,12 +6,14 @@ class Sprite {
     shallowCopy(new Sprite(loadImage(path)),this); 
   }
   public Sprite(PImage img) {
+    this(img, color(255,85,255));
+  }
+  public Sprite(PImage img, color toTransparent) {
     dat = new PImage(img.width,img.height);
     arrayCopy(img.pixels,dat.pixels);
     transparency = new boolean[dat.pixels.length];
-    color magenta = color(255,85,255);
     for (int i = 0; i < transparency.length; i++) {
-      transparency[i] = !(dat.pixels[i] == magenta); 
+      transparency[i] = !(dat.pixels[i] == toTransparent); 
     }
   }
   private void shallowCopy(Sprite a, Sprite b) {
