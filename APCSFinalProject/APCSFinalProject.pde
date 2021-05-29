@@ -1,6 +1,7 @@
 Map m;
 Sprite[] healthIcons;
 Sprite[] explosionFrames; 
+PFont aw2font;
 boolean unitExploding;
 final int scale = 2;
 Unit showRange = null;
@@ -19,6 +20,7 @@ void setup() {
   for (int i = 0; i < explosionFrames.length; i++) {
     explosionFrames[i] = new Sprite("ExplosionFrame" + i + ".png");
   }
+  aw2font = createFont("advance-wars-2-gba.ttf", 20, false);
   // load map 
   m = new Map(new byte[]{
     15,16, // Map size
