@@ -7,7 +7,8 @@ boolean inCombatMenu = false;
 int[][] damageChart;
 
 void setup() {
-  size(240,240);
+  //frameRate(5);
+  size(480,320);
   healthIcons = new Sprite[9];
   for (int i = 0; i < healthIcons.length; i++) {
     healthIcons[i] = new Sprite("icons/" + (i+1) + ".png");
