@@ -4,6 +4,7 @@ public class Unit {
   int lastX, lastY;
   int team;
   int index;
+  int exploding; // for explode animation when units are destroyed
   
   // combat variables //
   float health;
@@ -23,6 +24,7 @@ public class Unit {
     this.y = init_y;
     this.lastX = -1;
     this.lastY = -1;
+    this.exploding = -1;
     m.board[y][x].occupying = this;
     this.health = 10;
     this.index = type;
@@ -79,11 +81,11 @@ public class Unit {
     takenAction = true;  
   }
   private float calcPower(Unit a, Unit b) {
-    if (!(attackRangeMin != 0 && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMin-1,false,false,false)) && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMax,false,false,false)) {   
+    if (!(a.attackRangeMin != 0 && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMin-1,false,false,false)) && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMax,false,false,false)) {   
       /* this should do calculations */
       float t = damageChart[b.index][a.index] * a.health * .1;
       if (t <= 0) {return 0;}
-      return .1 * (t - (b.airborne ? 0 : m.board[b.y][b.x].getTerrain().defense) * (t * .1));
+      return .1 * (t - (b.airborne ? 0 : m.board[b.y][b.x].getTerrain().defense) * ((t * .1) - (t * .01 * (10 - b.health))));
     } else {
       return 0;
     }
@@ -94,10 +96,15 @@ public class Unit {
     println(thisPower);
     println(otherPower);
     
-    other.health -= thisPower;
+    /* deal 3/4's the damage, then 1/4 */
+    other.health -= thisPower * (3.0/4.0);
     if (other.health > 0) {
-      this.health -= otherPower;
-    } 
+      this.health -= otherPower * (3.0/4.0);
+    }
+    other.health -= thisPower / 4.0;
+    if (other.health > 0) {
+      this.health -= otherPower / 4.0;
+    }
     
     return thisPower;
   }
