@@ -5,6 +5,9 @@ class Sprite {
   public Sprite(String path) {
     shallowCopy(new Sprite(loadImage(path)),this); 
   }
+  public Sprite(String path, color toTransparent) {
+    shallowCopy(new Sprite(loadImage(path), toTransparent),this); 
+  }
   public Sprite(PImage img) {
     this(img, color(255,85,255));
   }
