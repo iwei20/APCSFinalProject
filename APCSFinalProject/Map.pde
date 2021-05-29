@@ -94,7 +94,7 @@ public class Map {
       }
     }
     //"sprites"
-    if (!inCombatMenu && c != null) {c.render(true, c.x + left_view, c.y + top_view);}
+    if (!unitExploding && !inCombatMenu && c != null) {c.render(true, c.x + left_view, c.y + top_view);}
     if (inCombatMenu && combatMenu != null) {combatMenu.render();}
   }
 }

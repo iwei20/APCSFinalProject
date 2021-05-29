@@ -1,5 +1,7 @@
 Map m;
 Sprite[] healthIcons;
+Sprite[] explosionFrames; 
+boolean unitExploding;
 final int scale = 2;
 Unit showRange = null;
 boolean inCombatMenu = false;
@@ -12,6 +14,10 @@ void setup() {
   healthIcons = new Sprite[9];
   for (int i = 0; i < healthIcons.length; i++) {
     healthIcons[i] = new Sprite("icons/" + (i+1) + ".png");
+  }
+  explosionFrames = new Sprite[9];
+  for (int i = 0; i < explosionFrames.length; i++) {
+    explosionFrames[i] = new Sprite("ExplosionFrame" + i + ".png");
   }
   // load map 
   m = new Map(new byte[]{3,3,0,0,3,0,1,14,-128,1,1,3,2,0,3,-128,6,6,6,4,4,4,3,3,3}); 

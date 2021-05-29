@@ -172,19 +172,31 @@ public class Unit {
     return yesunits;
   }
   public void render() {
-    if (health > 0) {
-      if (true) {
-        s.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
+    if (exploding == -1) {
+      if (health > 0) {
+        if (true) {
+          s.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
+        } else {
+          s_alt.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
+        }
+        if (ceil(health) < 10) {
+          healthIcons[ceil(health)-1].draw(scale*x*16+8*scale,scale*y*16+9*scale,scale,false,true);
+        }
       } else {
-        s_alt.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
-      }
-      if (ceil(health) < 10) {
-        healthIcons[ceil(health)-1].draw(scale*x*16+8*scale,scale*y*16+9*scale,scale,false,true);
+        unitExploding = true;
+        exploding = 0;
+        render();
       }
     } else {
-      //destroy unit 
-      m.board[y][x].occupying = null;
-      (team == 0 ? m.pUnits : m.eUnits).remove(this);
+      if (exploding >= 45) {
+        //destroy unit 
+        m.board[y][x].occupying = null;
+        (team == 0 ? m.pUnits : m.eUnits).remove(this);
+        unitExploding = false;
+      } else {
+        explosionFrames[exploding/5].draw(scale*(x-1)*16,scale*(y-2)*16+6*scale,scale,false,true);
+        exploding++;  
+      }
     }
   }
 }

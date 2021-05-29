@@ -67,7 +67,7 @@ void parseInput() {
         inCombatMenu = false;
       }
     }
-  } else {
+  } else if (!unitExploding){
     if (showRange != null) {keyCode = 'U';}
     
     if (keyCode == 'W') { 
