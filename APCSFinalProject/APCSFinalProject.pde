@@ -23,12 +23,12 @@ void setup() {
   m = new Map(new byte[]{
     15,16, // Map size
     // Friendly units
-    0,0,3,
-    0,1,14,
+    2,3,3,
+    2,7,14,
     -128,
     // Enemy units
-    1,1,3,
-    2,0,3,
+    14,4,3,
+    14,5,3,
     -128,
     // Map data https://www.warsworldnews.com/wp/aw2/maps-aw2/volcano-isle/
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
