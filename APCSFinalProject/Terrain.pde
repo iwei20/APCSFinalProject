@@ -29,35 +29,42 @@ public class Terrain {
         defense = 0;
         s = new Sprite("tiles/Water.png");
         break;
-      case 2: // road
+      case 2: // horizontal road
         drivable = true;
         ocean = false;
         wet = false;
         defense = 0;
-        s = new Sprite("tiles/Gray.png");
+        s = new Sprite("tiles/Road_Horizontal.png");
         break;
-      case 3: // plains
+      case 3: // vertical road
+        drivable = true;
+        ocean = false;
+        wet = false;
+        defense = 0;
+        s = new Sprite("tiles/Road_Vertical.png");
+        break;
+      case 4: // plains
         drivable = true;
         ocean = false;
         wet = false;
         defense = 1;
         s = new Sprite("tiles/Plains.png");
         break;
-      case 4: // forest
+      case 5: // forest
         drivable = true;
         ocean = false;
         wet = false;
         defense = 2;
         s = new Sprite("tiles/Forest.png");
         break;
-      case 5: // city
+      case 6: // city
         drivable = true;
         ocean = false;
         wet = false;
         defense = 3;
         s = new Sprite("tiles/City.png");
         break;
-      case 6: //mountain
+      case 7: //mountain
         drivable = false;
         ocean = false;
         wet = false;
