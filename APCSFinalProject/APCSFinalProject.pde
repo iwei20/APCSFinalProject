@@ -59,6 +59,7 @@ void setup() {
       damageChart[j][i] = temp[i+j*damageChart[0].length];
     }  
   }
+  textFont(aw2font);
 }
 
 void draw() {
