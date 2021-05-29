@@ -55,7 +55,7 @@ public class Terrain {
         ocean = false;
         wet = false;
         defense = 3;
-        s = new Sprite(new PImage(16,16));
+        s = new Sprite("tiles/City.png");
         break;
       case 6: //mountain
         drivable = false;
