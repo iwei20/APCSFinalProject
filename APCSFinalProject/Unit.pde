@@ -144,7 +144,7 @@ public class Unit {
   }
   private boolean checkMvmtRange_rec(int tx, int ty, int steps, int maxSteps, boolean add, boolean checkTerrain, boolean checkAtAll) {
     if (!checkTerrain && tx == x && ty == y) {return true;}
-    if (tx < 0 || tx >= m.board.length || ty < 0 || ty >= m.board[0].length) {return false;}
+    if (ty < 0 || ty >= m.board.length || tx < 0 || tx >= m.board[0].length) {return false;}
     Terrain t = m.board[ty][tx].getTerrain();
     if (checkAtAll) {
       if (navalOnly && t.wet == false) {return false;}
