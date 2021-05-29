@@ -115,7 +115,9 @@ void parseInput() {
         if (m.getTile(m.getCursor().x,m.getCursor().y).occupying == null) {
           inCombatMenu = true;
           m.combatMenu = new MenuOption(new String[]{"Unit","Save","Options","End"},"GUI/MainMenu.png");
-        } else if (!m.getTile(m.getCursor().x,m.getCursor().y).occupying.takenAction && m.getTile(m.getCursor().x,m.getCursor().y).occupying.exploding == -1) {
+        } else if (!m.getTile(m.getCursor().x,m.getCursor().y).occupying.takenAction && 
+                    m.getTile(m.getCursor().x,m.getCursor().y).occupying.exploding == -1 && 
+                    m.getTile(m.getCursor().x,m.getCursor().y).occupying.team == m.whoseTurn) {
           m.getCursor().selected = m.getTile(m.getCursor().x,m.getCursor().y).occupying;
           m.getCursor().storex = m.getCursor().x;
           m.getCursor().storey = m.getCursor().y;
