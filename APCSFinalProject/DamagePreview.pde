@@ -27,7 +27,7 @@ class DamagePreview {
     fill(180, 180, 180, 200);
     rect(10, height - 110, 170, 100);
     target.s.draw(110, height - 110, 4);
-    m.board[target.x][target.y].getTerrain().s.draw(35, height - 90, 3);
+    m.board[target.y][target.x].getTerrain().s.draw(35, height - 90, 3);
     heart.draw(110, height - 40, 3);
     
     fill(255, 255, 255);
