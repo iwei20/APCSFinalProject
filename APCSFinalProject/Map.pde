@@ -7,7 +7,7 @@ public class Map {
   private ArrayList<Unit> pUnits, eUnits;
   
   public Map(int rows, int cols) {
-    c = new Cursor();
+    c = new Cursor(false);
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     whoseTurn = 0;
@@ -23,7 +23,7 @@ public class Map {
   afterwards is map data according to the size given;
   */
   public Map(byte[] data) {
-    c = new Cursor();
+    c = new Cursor(false);
     whoseTurn = 0;
     pUnits = new ArrayList();
     eUnits = new ArrayList();
@@ -52,15 +52,12 @@ public class Map {
     l++;
   }
   public void nextTurn() {
-    whoseTurn = (whoseTurn == 0 ? 1 : 0);
-    if (whoseTurn == 0) {
-      for (int i = 0; i < pUnits.size(); i++) {
-        pUnits.get(i).newTurn(); 
-      }
-    } else {
-      for (int i = 0; i < eUnits.size(); i++) {
-        eUnits.get(i).newTurn(); 
-      }
+    whoseTurn = (whoseTurn == 0 ? 2 : 0);
+    for (int i = 0; i < pUnits.size(); i++) {
+      pUnits.get(i).newTurn(); 
+    }
+    for (int i = 0; i < eUnits.size(); i++) {
+      eUnits.get(i).newTurn(); 
     }
   }
   public Tile getTile(int x, int y) {
