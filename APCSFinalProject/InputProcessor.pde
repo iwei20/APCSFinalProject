@@ -24,7 +24,7 @@ void parseInput() {
             possibleAttacks = null;
             break;
           case "Fire":
-            m.combatMenu.initSelection(possibleAttacks);
+            m.combatMenu.initSelection(m.getCursor().selected, possibleAttacks);
             break;
           case "Unit":
           case "Save":

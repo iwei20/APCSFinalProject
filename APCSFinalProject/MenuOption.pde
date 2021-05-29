@@ -5,6 +5,7 @@ class MenuOption {
   MenuCursor cursor;
   int cursor_y;
   Sprite s;
+  DamagePreview dp;
   
   ArrayList<Unit> unitTargets;
   Cursor unit_cursor;
@@ -29,6 +30,7 @@ class MenuOption {
         options = new String[]{"Fire","Wait"};
         break;
     }
+    dp = new DamagePreview(null, null);
   }
   public MenuOption(String[] mOptions, String filepath) {
     unit_cursor = null;
@@ -53,12 +55,14 @@ class MenuOption {
     return options[cursor_y];  
   }
   
-  public void initSelection(ArrayList<Unit> targets) {
+  public void initSelection(Unit attacker, ArrayList<Unit> targets) {
     unitTargets = targets;
     unit_cursor = new Cursor(true);
     selectedUnit = 0;
     unit_cursor.x = targets.get(selectedUnit).x;
     unit_cursor.y = targets.get(selectedUnit).y;
+    dp.attacker = attacker;
+    dp.target = targets.get(selectedUnit);
   }
   public void destSelection() {
     unitTargets = null;
@@ -68,12 +72,14 @@ class MenuOption {
     selectedUnit = (selectedUnit + 1) % unitTargets.size();
     unit_cursor.x = unitTargets.get(selectedUnit).x;
     unit_cursor.y = unitTargets.get(selectedUnit).y;  
+    dp.target = unitTargets.get(selectedUnit);
   }
   public void prevUnit() {
     selectedUnit--;
     if (selectedUnit < 0) {selectedUnit = unitTargets.size() - 1;}
     unit_cursor.x = unitTargets.get(selectedUnit).x;
     unit_cursor.y = unitTargets.get(selectedUnit).y; 
+    dp.target = unitTargets.get(selectedUnit);
   }
   public Unit getSelectedUnit() {
     return unitTargets.get(selectedUnit);  
@@ -85,6 +91,7 @@ class MenuOption {
       cursor.render(c_render_x,c_render_y+cursor_y*scale*16);  
     } else {
       unit_cursor.render(true,unit_cursor.x,unit_cursor.y,unitTargets.get(selectedUnit));  
+      if(dp.hasUnits()) dp.display();
     }
   }
 }

@@ -80,7 +80,7 @@ public class Unit {
   public void setActionTaken() {
     takenAction = true;  
   }
-  private float calcPower(Unit a, Unit b) {
+  public float calcPower(Unit a, Unit b) {
     if (!(a.attackRangeMin != 0 && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMin-1,false,false,false)) && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMax,false,false,false)) {   
       /* this should do calculations */
       float t = damageChart[b.index][a.index] * a.health * .1;
