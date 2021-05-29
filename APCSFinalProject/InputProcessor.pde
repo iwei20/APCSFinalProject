@@ -72,20 +72,20 @@ void parseInput() {
     
     if (keyCode == 'W') { 
       if (showRange == null) {
-        if(m.getCursor().y + m.top_view <= 0) {
+        if(m.getCursor().y <= 0) {
           m.getCursor().y = 0;
-          if (m.getCursor().selected == null) {m.shift(0, 1);}
         } else {
+          if(m.getCursor().y + m.top_view <= 0) m.shift(0, 1); 
           m.moveCursor(0, -1);
         }
       }
     }
     if (keyCode == 'A') { 
       if (showRange == null) {
-        if(m.getCursor().x + m.left_view <= 0) {
+        if(m.getCursor().x <= 0) {
           m.getCursor().x = 0;
-          if (m.getCursor().selected == null) {m.shift(1, 0);}
         } else {
+          if(m.getCursor().y + m.top_view <= 0) m.shift(1, 0);
           m.moveCursor(-1, 0);
         }
       }
@@ -94,8 +94,8 @@ void parseInput() {
       if (showRange == null) {
         if(m.getCursor().y >= m.board.length - 1) {
           m.getCursor().y = m.board.length-1;
-          if (m.getCursor().selected == null) {m.shift(0, -1);}
         } else {
+          if(m.getCursor().y + m.top_view >= height / 32 - 1) m.shift(0, -1); 
           m.moveCursor(0, 1);
         }
       }
@@ -104,8 +104,8 @@ void parseInput() {
       if (showRange == null) {
         if(m.getCursor().x >= m.board[0].length - 1) {
           m.getCursor().x = m.board[0].length-1;
-          if (m.getCursor().selected == null) {m.shift(-1, 0);}
         } else {
+          if(m.getCursor().x + m.left_view >= width / 32 - 1) m.shift(1, 0); 
           m.moveCursor(1, 0);
         }
       }
