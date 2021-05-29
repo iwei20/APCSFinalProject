@@ -105,7 +105,7 @@ void parseInput() {
         if(m.getCursor().x >= m.board[0].length - 1) {
           m.getCursor().x = m.board[0].length-1;
         } else {
-          if(m.getCursor().x + m.left_view >= width / 32 - 1) m.shift(1, 0); 
+          if(m.getCursor().x + m.left_view >= width / 32 - 1) m.shift(-1, 0); 
           m.moveCursor(1, 0);
         }
       }
