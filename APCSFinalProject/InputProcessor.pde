@@ -85,7 +85,7 @@ void parseInput() {
         if(m.getCursor().x <= 0) {
           m.getCursor().x = 0;
         } else {
-          if(m.getCursor().y + m.top_view <= 0) m.shift(1, 0);
+          if(m.getCursor().x + m.left_view <= 0) m.shift(1, 0);
           m.moveCursor(-1, 0);
         }
       }
