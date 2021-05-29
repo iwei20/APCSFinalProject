@@ -1,4 +1,6 @@
 class MenuOption {
+  int render_x, render_y;
+  int c_render_x, c_render_y;
   String[] options;
   MenuCursor cursor;
   int cursor_y;
@@ -11,6 +13,9 @@ class MenuOption {
   public MenuOption(boolean canFire, boolean canLoad, boolean canDrop) {
     unit_cursor = null;
     unitTargets = null;
+    
+    render_x = width*5/8-10*scale;   render_y = width/16;
+    c_render_x = width*5/8-20*scale; c_render_y = width/16+10*scale; 
     
     cursor_y = 0;
     cursor = new MenuCursor();
@@ -25,6 +30,18 @@ class MenuOption {
         break;
     }
   }
+  public MenuOption(String[] mOptions, String filepath) {
+    unit_cursor = null;
+    unitTargets = null;
+    
+    render_x = width/16;   render_y = width/16;
+    c_render_x = width/16-4*scale; c_render_y = width/16+10*scale;
+    cursor_y = 0;
+    cursor = new MenuCursor();
+    s = new Sprite(filepath);
+    options = new String[mOptions.length];
+    arrayCopy(mOptions,options);
+  }
   
   public void moveCursorDown() {
     cursor_y = min(options.length-1,cursor_y+1);
@@ -38,7 +55,7 @@ class MenuOption {
   
   public void initSelection(ArrayList<Unit> targets) {
     unitTargets = targets;
-    unit_cursor = new Cursor();
+    unit_cursor = new Cursor(true);
     selectedUnit = 0;
     unit_cursor.x = targets.get(selectedUnit).x;
     unit_cursor.y = targets.get(selectedUnit).y;
@@ -64,10 +81,10 @@ class MenuOption {
   
   public void render() {
     if (unitTargets == null) {
-      s.draw(width*5/8-10*scale,width/16,scale,false,false);
-      cursor.render(width*5/8-20*scale,width/16+10*scale+cursor_y*scale*16);  
+      s.draw(render_x,render_y,scale,false,false);
+      cursor.render(c_render_x,c_render_y+cursor_y*scale*16);  
     } else {
-      unit_cursor.render(true,unit_cursor.x,unit_cursor.y);  
+      unit_cursor.render(true,unit_cursor.x,unit_cursor.y,unitTargets.get(selectedUnit));  
     }
   }
 }
