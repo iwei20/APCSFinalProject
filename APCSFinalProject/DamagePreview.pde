@@ -33,9 +33,9 @@ class DamagePreview {
     fill(255, 255, 255);
     textSize(16);
     textAlign(LEFT);
-    text("DEF " + m.board[target.x][target.y].getTerrain().defense, 37, height - 30);
+    text("DEF " + m.board[target.y][target.x].getTerrain().defense, 37, height - 30);
     textSize(20);
-    text(round(target.health), 135, height - 26);
+    text(ceil(target.health), 135, height - 26);
     rect(pos_x + 97, pos_y_dam - 40, 56, 47);
     triangle(pos_x + 122, pos_y_dam + 7, pos_x + 130, pos_y_dam + 7, pos_x + 126, pos_y_dam + 7 + 4 * sqrt(3));
     fill(255, 0, 0);
