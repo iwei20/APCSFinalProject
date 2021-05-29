@@ -12,5 +12,5 @@ A version of the GBA game Advance Wars using Processing. Advance Wars is a turn-
 <h3> 5/27/2021 </h3>
 - Ivan - Introduce map scrolling and aligned cursor with it <br>
 - Cameron - Aligned units to scrolling, implemented better displayRange() method with actual checks, wrote menuOption() and menuCursor() classes, imported some more graphics, improved displayRange() to also support attack range checks (not fully done yet).
-<h3> 5/27/2021 </h3>
+<h3> 5/28/2021 </h3>
 - Cameron - finished displayRange(), implemented methods to allow you to attack, added unit damage chart/table, added damage formula for calcPower() method.
