@@ -32,8 +32,8 @@ public class Unit {
     this.team = team;
     this.mvmtType = (index >= 24) ? 3 : ((index == 2 || index == 3) ? 0 : (index == 1) ? 2 : 1);
     this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 3 : 2) : 5);
-    this.attackRangeMin = (index >= 12 && index <= 14) ? (index == 14 ? 1 : 3) : 0;
-    this.attackRangeMax = (index >= 12 && index <= 14) ? (index == 14 ? 2 : 5) : 1;
+    this.attackRangeMin = (index >= 12 && index <= 14) ? (index == 14 ? 2 : 3) : 0;
+    this.attackRangeMax = (index >= 12 && index <= 14) ? (index == 14 ? 3 : 5) : 1;
     this.airborne = index >= 16 && index <= 19;
     this.isVehicle = index == 0 || (index >= 8 && index <= 14);
     this.stationary = index == 12;
@@ -93,8 +93,8 @@ public class Unit {
     }
   }
   public float attack(Unit other) {
-    float thisPower = calcPower(this,other) * 1.3;
-    float otherPower = calcPower(other,this);
+    float thisPower = calcPower(this,other) * 1.1;
+    float otherPower = calcPower(other,this) * .9;
     println(thisPower);
     println(otherPower);
     
@@ -111,7 +111,7 @@ public class Unit {
     return thisPower;
   }
   public void displayRange(boolean tint, boolean attack) {
-    noStroke();
+    stroke(255);
     if (tint) {
       switch(team) {
         case 0:
@@ -133,19 +133,54 @@ public class Unit {
     } else {
       fill(0,180,0,75);  
     }
-    for (int j = max(0,y-mvmtRange-attackRangeMax); j <= min(m.board.length-1,y+mvmtRange+attackRangeMax); j++) {
-      for (int i = max(0,x-mvmtRange-attackRangeMax); i <= min(m.board[0].length-1,x+mvmtRange+attackRangeMax); i++) {
-        if ((!attack && checkMvmtRange_rec(i,j,0,mvmtRange,false,true,true)) || (attack && canAttack && (canAttackAndMove ? checkMvmtRange_rec(i,j,0,mvmtRange+1,false,false,true) : 
-        (!checkMvmtRange_rec(i,j,0,attackRangeMin-1,false,false,false) && checkMvmtRange_rec(i,j,0,attackRangeMax,false,false,false))))) {
+    int yMin = max(0,y-mvmtRange-attackRangeMax-1); int yMax = min(m.board.length-1,y+mvmtRange+attackRangeMax+1);
+    int xMin = max(0,x-mvmtRange-attackRangeMax-1); int xMax = min(m.board[0].length-1,x+mvmtRange+attackRangeMax+1);
+    boolean[][] drawnYet = new boolean[yMax-yMin+1][xMax-xMin+1];
+    for (int j = 0; j < drawnYet.length; j++) {for (int i = 0; i < drawnYet[j].length; i++) {drawnYet[j][i] = false;}}
+    for (int j = yMin; j <= yMax; j++) {
+      for (int i = xMin; i <= xMax; i++) {
+        if (!attack) {
+          if (checkMvmtRange_rec(i,j,0,mvmtRange,false,true,true)) {
             rect(scale*(i+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
             if (i == x && y == j) {render();}
-            //println("rect("+scale*i*16+"," +scale*j*16+"," +scale*16 +"," +scale*16+")");
+          }
+        }
+        else if (canAttack) {
+          if (canAttackAndMove ? checkMvmtRange_rec(i,j,0,mvmtRange,false,false,true) : 
+          (abs(j-y) + abs(i-x) >= attackRangeMin && abs(j-y) + abs(i-x) <= attackRangeMax)) {
+            if (!drawnYet[j-yMin][i-xMin]) {
+              rect(scale*(i+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
+              drawnYet[j-yMin][i-xMin] = true;
+              if (i == x && y == j) {render();}  
+            }
+            if (canAttackAndMove) {
+              if (i+1-xMin < drawnYet[0].length && !drawnYet[j-yMin][i+1-xMin]) {
+                rect(scale*(i+1+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
+                drawnYet[j-yMin][i+1-xMin] = true;
+                if (i+1 == x && y == j) {render();}  
+              }
+              if (i-1-xMin >= 0 && !drawnYet[j-yMin][i-1-xMin]) {
+                rect(scale*(i-1+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
+                drawnYet[j-yMin][i-1-xMin] = true;
+                if (i-1 == x && y == j) {render();}  
+              }
+              if (j+1-yMin < drawnYet.length && !drawnYet[j+1-yMin][i-xMin]) {
+                rect(scale*(i+m.left_view)*16,scale*(j+1+m.top_view)*16,scale*16,scale*16);
+                drawnYet[j+1-yMin][i-xMin] = true;
+                if (i == x && y == j+1) {render();}  
+              }
+              if (j-1-yMin >= 0 && !drawnYet[j-1-yMin][i-xMin]) {
+                rect(scale*(i+m.left_view)*16,scale*(j-1+m.top_view)*16,scale*16,scale*16);
+                drawnYet[j-1-yMin][i-xMin] = true;
+                if (i == x && y == j-1) {render();}  
+              }
+            }
+          }
         }
       }
     }
   }
-  private boolean checkMvmtRange_rec(int tx, int ty, int steps, int maxSteps, boolean add, boolean checkTerrain, boolean checkAtAll) {
-    if (!checkTerrain && tx == x && ty == y) {return true;}
+  private boolean checkMvmtRange_rec(int tx, int ty, int steps, int maxSteps, boolean add, boolean checkFlag, boolean checkAtAll) {
     if (ty < 0 || ty >= m.board.length || tx < 0 || tx >= m.board[0].length) {return false;}
     Terrain t = m.board[ty][tx].getTerrain();
     if (checkAtAll) {
@@ -153,9 +188,12 @@ public class Unit {
       if (tx == x && ty == y) {return true;}
       if (add) {steps += (airborne ?  1 : (t.movementCosts[mvmtType]));}
     } else {if (add) {steps++;}}
-    if (steps > maxSteps) {return false;}
-    return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,true,checkTerrain,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,true,checkTerrain,checkAtAll) || 
-    checkMvmtRange_rec(tx,ty-1,steps,maxSteps,true,checkTerrain,checkAtAll) || checkMvmtRange_rec(tx,ty+1,steps,maxSteps,true,checkTerrain,checkAtAll);
+    if (steps > maxSteps) {
+      return false;
+    }
+    if (tx == this.x && ty == this.y) {return true;}
+    return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,true,checkFlag,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,true,checkFlag,checkAtAll) || 
+    checkMvmtRange_rec(tx,ty-1,steps,maxSteps,true,checkFlag,checkAtAll) || checkMvmtRange_rec(tx,ty+1,steps,maxSteps,true,checkFlag,checkAtAll);
   }
   public ArrayList<Unit> checkUnitsInRange() {
     ArrayList<Unit> yesunits = new ArrayList();  
@@ -163,8 +201,7 @@ public class Unit {
     if (!canAttackAndMove && (lastX != x || lastY != y)) {return yesunits;}
     for (int j = max(0,y-attackRangeMax); j <= min(m.board.length-1,y+attackRangeMax); j++) {
       for (int i = max(0,x-attackRangeMax); i <= min(m.board[0].length-1,x+attackRangeMax); i++) {
-        if (m.board[j][i].occupying != null && m.board[j][i].occupying.team != this.team && !(attackRangeMin != 0 
-        && checkMvmtRange_rec(i,j,0,attackRangeMin-1,false,false,false)) && checkMvmtRange_rec(i,j,0,attackRangeMax,false,false,false)) {
+        if (m.board[j][i].occupying != null && m.board[j][i].occupying.team != this.team && (abs(i-x) + abs(j-y) >= attackRangeMin && abs(i-x) + abs(j-y) <= attackRangeMax)) {
           if (calcPower(this,m.board[j][i].occupying) != 0) {yesunits.add(m.board[j][i].occupying);}
         }
       }
