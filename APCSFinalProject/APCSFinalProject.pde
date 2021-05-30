@@ -6,6 +6,7 @@ boolean unitExploding;
 final int scale = 2;
 Unit showRange = null;
 boolean inCombatMenu = false;
+int[] playerTeams = new int[]{0,2};
 /* damageChart[defender][attacker] */
 int[][] damageChart;
 
@@ -27,6 +28,7 @@ void setup() {
     // Friendly units
     2,3,3,
     2,7,14,
+    5,6,1,
     -128,
     // Enemy units
     4,2,11,

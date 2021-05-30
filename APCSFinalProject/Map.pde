@@ -10,7 +10,7 @@ public class Map {
     c = new Cursor(false);
     pUnits = new ArrayList();
     eUnits = new ArrayList();
-    whoseTurn = 0;
+    whoseTurn = playerTeams[0];
     board = new Tile[cols][rows];
     top_view = 0; left_view = 0; 
   }
@@ -24,7 +24,7 @@ public class Map {
   */
   public Map(byte[] data) {
     c = new Cursor(false);
-    whoseTurn = 0;
+    whoseTurn = playerTeams[0];
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     board = new Tile[data[0]][data[1]];
@@ -52,12 +52,12 @@ public class Map {
     l++;
   }
   public void nextTurn() {
-    whoseTurn = (whoseTurn == 0 ? 2 : 0);
+    whoseTurn = playerTeams[(whoseTurn == playerTeams[0] ? 1 : 0)];
     for (int i = 0; i < pUnits.size(); i++) {
-      pUnits.get(i).newTurn(); 
+      pUnits.get(i).newTurn(whoseTurn == playerTeams[0]); 
     }
     for (int i = 0; i < eUnits.size(); i++) {
-      eUnits.get(i).newTurn(); 
+      eUnits.get(i).newTurn(whoseTurn == playerTeams[1]); 
     }
   }
   public Tile getTile(int x, int y) {
