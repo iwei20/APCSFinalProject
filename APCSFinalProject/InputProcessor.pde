@@ -35,7 +35,7 @@ void parseInput() {
             //m.getCursor().selected = null; 
             inCombatMenu = false;
             m.nextTurn();
-            break; //<>//
+            break; //<>// //<>//
             
         }
         if (selectedAction.equals("Wait")) {
@@ -116,8 +116,8 @@ void parseInput() {
           inCombatMenu = true;
           m.combatMenu = new MenuOption(new String[]{"Unit","Save","Options","End"},"GUI/MainMenu.png");
         } else if (!m.getTile(m.getCursorX(),m.getCursorY()).occupying.takenAction && 
-                    m.getTile(m.getCursorX(),m.getCursorY()).occupying.exploding == -1 && 
-                    m.getTile(m.getCursorX(),m.getCursorY()).occupying.team == m.whoseTurn) {
+                    m.getTile(m.getCursorX(),m.getCursorY()).occupying.exploding == -1 /*&& 
+                    m.getTile(m.getCursorX(),m.getCursorY()).occupying.team == m.whoseTurn*/) {
           m.getCursor().selected = m.getTile(m.getCursorX(),m.getCursorY()).occupying;
           m.getCursor().storex = m.getCursor().x;
           m.getCursor().storey = m.getCursor().y;
