@@ -112,18 +112,18 @@ void parseInput() {
     }
     if (keyCode == 'I')  {
       if (m.getCursor().selected == null) {
-        if (m.getTile(m.getCursorX(),m.getCursorY()).occupying == null) {
+        if (m.getTile(m.getCursor().x,m.getCursor().y).occupying == null) {
           inCombatMenu = true;
           m.combatMenu = new MenuOption(new String[]{"Unit","Save","Options","End"},"GUI/MainMenu.png");
-        } else if (!m.getTile(m.getCursorX(),m.getCursorY()).occupying.takenAction && 
-                    m.getTile(m.getCursorX(),m.getCursorY()).occupying.exploding == -1 /*&& 
-                    m.getTile(m.getCursorX(),m.getCursorY()).occupying.team == m.whoseTurn*/) {
-          m.getCursor().selected = m.getTile(m.getCursorX(),m.getCursorY()).occupying;
+        } else if (!m.getTile(m.getCursor().x,m.getCursor().y).occupying.takenAction && 
+                    m.getTile(m.getCursor().x,m.getCursor().y).occupying.exploding == -1 /*&& 
+                    m.getTile(m.getCursor().x,m.getCursor().y).occupying.team == m.whoseTurn*/) {
+          m.getCursor().selected = m.getTile(m.getCursor().x,m.getCursor().y).occupying;
           m.getCursor().storex = m.getCursor().x;
           m.getCursor().storey = m.getCursor().y;
         }
       } else if (/*m.getCursor().selected != null && */m.getCursor().selected.team == m.whoseTurn) {
-        if(m.getCursor().selected.move(m.getCursorX(),m.getCursorY())) {
+        if(m.getCursor().selected.move(m.getCursor().x,m.getCursor().y)) {
           inCombatMenu = true;
           possibleAttacks = m.getCursor().selected.checkUnitsInRange();
           m.combatMenu = new MenuOption(possibleAttacks.size() > 0,false,false);
@@ -138,8 +138,8 @@ void parseInput() {
         m.getCursor().x = m.getCursor().storex;
         m.getCursor().y = m.getCursor().storey;
       } else {
-        if (m.getTile(m.getCursorX(),m.getCursorY()).occupying != null) {
-          showRange = m.getTile(m.getCursorX(),m.getCursorY()).occupying;
+        if (m.getTile(m.getCursor().x,m.getCursor().y).occupying != null) {
+          showRange = m.getTile(m.getCursor().x,m.getCursor().y).occupying;
         }
       }
     } else {

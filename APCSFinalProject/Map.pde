@@ -100,7 +100,7 @@ public class Map {
       }
     }
     //"sprites"
-    if (!unitExploding && !inCombatMenu && c != null) {c.render(true, c.x + left_view, c.y + top_view);}
+    if (!unitExploding && !inCombatMenu && c != null) {c.render(true, c.x, c.y);}
     if (inCombatMenu && combatMenu != null) {combatMenu.render();}
   }
 }
