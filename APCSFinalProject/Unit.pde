@@ -31,7 +31,7 @@ public class Unit {
     this.index = type;
     this.team = team;
     this.mvmtType = (index >= 24) ? 3 : ((index == 2 || index == 3) ? 0 : (index == 1) ? 2 : 1);
-    this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 3 : 2) : 5);
+    this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 2 : 3) : 5);
     this.attackRangeMin = (index >= 12 && index <= 14) ? (index == 14 ? 2 : 3) : 0;
     this.attackRangeMax = (index >= 12 && index <= 14) ? (index == 14 ? 3 : 5) : 1;
     this.airborne = index >= 16 && index <= 19;
@@ -50,11 +50,11 @@ public class Unit {
     s_alt = null;  
     }
   }
-  public void newTurn() {
+  public void newTurn(boolean restore) {
     this.lastX = -1;
     this.lastY = -1;
     this.takenAction = false;
-    if (false) {health = min(10,health+2);}
+    if (restore && false) {health = min(10,health+2);}
   }
   public void undoMove() {
     m.board[y][x].occupying = null;
@@ -142,7 +142,11 @@ public class Unit {
         if (!attack) {
           if (checkMvmtRange_rec(i,j,0,mvmtRange,false,true,true)) {
             rect(scale*(i+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
-            if (i == x && y == j) {render();}
+            if (i == x && y == j) {render();} else {
+              //textSize(20);
+              //text("" + m.getTile(i,j).getTerrain().movementCosts[mvmtType],scale*(i+m.left_view)*16+8*scale,scale*(j+m.top_view)*16+8*scale);
+              //println((scale*(j+m.left_view)*16+8*scale) + " " + (scale*(j+m.top_view)*16+8*scale) + " " + m.getTile(i,j).getTerrain().movementCosts[mvmtType]);
+            }
           }
         }
         else if (canAttack) {
@@ -182,16 +186,15 @@ public class Unit {
   }
   private boolean checkMvmtRange_rec(int tx, int ty, int steps, int maxSteps, boolean add, boolean checkFlag, boolean checkAtAll) {
     if (ty < 0 || ty >= m.board.length || tx < 0 || tx >= m.board[0].length) {return false;}
+    if (tx == x && ty == y) {return true;}
     Terrain t = m.board[ty][tx].getTerrain();
     if (checkAtAll) {
       if (!airborne && t.movementCosts[mvmtType] == -1) {return false;}
-      if (tx == x && ty == y) {return true;}
-      if (add) {steps += (airborne ?  1 : (t.movementCosts[mvmtType]));}
+      if (add) {steps += (airborne ?  1 : t.movementCosts[mvmtType]);}
     } else {if (add) {steps++;}}
-    if (steps > maxSteps) {
+    if (steps >= maxSteps) {
       return false;
     }
-    if (tx == this.x && ty == this.y) {return true;}
     return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,true,checkFlag,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,true,checkFlag,checkAtAll) || 
     checkMvmtRange_rec(tx,ty-1,steps,maxSteps,true,checkFlag,checkAtAll) || checkMvmtRange_rec(tx,ty+1,steps,maxSteps,true,checkFlag,checkAtAll);
   }
