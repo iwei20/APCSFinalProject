@@ -73,6 +73,12 @@ public class Map {
   public Cursor getCursor() {
     return c;
   }
+  public int getCursorX() {
+    return c.x + left_view;
+  }
+  public int getCursorY() {
+    return c.y + top_view;
+  }
   
   public void moveCursor(int dx, int dy) {
     c.y += dy;

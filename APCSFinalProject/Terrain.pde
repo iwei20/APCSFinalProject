@@ -1,8 +1,9 @@
 public class Terrain {
   int defense; 
   boolean ocean;
-  boolean wet;
   boolean drivable;
+  // index 0 = on foot, 1 = treads, 2 = tires, 3 = boat
+  int movementCosts[];
   Sprite s;
   
   public Terrain(int index) {
@@ -11,65 +12,65 @@ public class Terrain {
       case -1: // reef
         drivable = false;
         ocean = true;
-        wet = true;
         defense = 0;
         s = new Sprite("tiles/Reef.png");
+        movementCosts = new int[]{-1,-1,-1,2};
         break;
       case 0: // ocean
         drivable = false;
         ocean = true;
-        wet = true;
         defense = 0;
         s = new Sprite("tiles/Water.png");
+        movementCosts = new int[]{-1,-1,-1,1};
         break;
       case 1: // river
         drivable = true;
         ocean = false;
-        wet = true;
         defense = 0;
         s = new Sprite("tiles/Water.png");
+        movementCosts = new int[]{2,-1,-1,1};
         break;
       case 2: // horizontal road
         drivable = true;
         ocean = false;
-        wet = false;
         defense = 0;
         s = new Sprite("tiles/Road_Horizontal.png");
+        movementCosts = new int[]{1,1,1,-1};
         break;
       case 3: // vertical road
         drivable = true;
         ocean = false;
-        wet = false;
         defense = 0;
         s = new Sprite("tiles/Road_Vertical.png");
+        movementCosts = new int[]{1,1,1,-1};
         break;
       case 4: // plains
         drivable = true;
         ocean = false;
-        wet = false;
         defense = 1;
         s = new Sprite("tiles/Plains.png");
+        movementCosts = new int[]{1,1,2,-1};
         break;
       case 5: // forest
         drivable = true;
         ocean = false;
-        wet = false;
         defense = 2;
         s = new Sprite("tiles/Forest.png");
+        movementCosts = new int[]{1,2,3,-1};
         break;
       case 6: // city
         drivable = true;
         ocean = false;
-        wet = false;
         defense = 3;
         s = new Sprite("tiles/City.png");
+        movementCosts = new int[]{1,1,1,-1};
         break;
       case 7: //mountain
         drivable = false;
         ocean = false;
-        wet = false;
         defense = 4;
         s = new Sprite("tiles/Mountain.png");
+        movementCosts = new int[]{2,-1,-1,-1};
         break;
     }
   }

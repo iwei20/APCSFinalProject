@@ -8,6 +8,7 @@ public class Unit {
   
   // combat variables //
   float health;
+  int mvmtType; // 0 = on foot, 1 = treads, 2 = tires
   int mvmtRange;
   int attackRangeMin, attackRangeMax;
   int unitsCanTransport;
@@ -29,16 +30,17 @@ public class Unit {
     this.health = 10;
     this.index = type;
     this.team = team;
-    this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 3 : 2) : 8);
-    this.attackRangeMin = (index >= 12 && index <= 14) ? (index == 14 ? 2 : 3) : 0;
-    this.attackRangeMax = (index >= 12 && index <= 14) ? (index == 14 ? 3 : 5) : 1;
+    this.mvmtType = (index >= 24) ? 3 : ((index == 2 || index == 3) ? 0 : (index == 1) ? 2 : 1);
+    this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 3 : 2) : 5);
+    this.attackRangeMin = (index >= 12 && index <= 14) ? (index == 14 ? 1 : 3) : 0;
+    this.attackRangeMax = (index >= 12 && index <= 14) ? (index == 14 ? 2 : 5) : 1;
     this.airborne = index >= 16 && index <= 19;
     this.isVehicle = index == 0 || (index >= 8 && index <= 14);
     this.stationary = index == 12;
     this.canAttack = !(index == 0 || index == 16);
     this.canAttackAndMove = !(index == 8 || index == 9 || (index >= 12 && index <= 14));
     this.unitsCanTransport = (index == 0 || index == 16 || index == 24) ? (index == 24 ? 2 : 1) : 0;   
-    this.navalOnly = index >= 24;
+    this.navalOnly = index >= 24; 
     
     int spriteIndex = type;
     s = new Sprite(loadImage("units/t" + team + "_" + spriteIndex + ".png"));
@@ -147,13 +149,11 @@ public class Unit {
     if (ty < 0 || ty >= m.board.length || tx < 0 || tx >= m.board[0].length) {return false;}
     Terrain t = m.board[ty][tx].getTerrain();
     if (checkAtAll) {
-      if (navalOnly && t.wet == false) {return false;}
-      if (t.ocean && !airborne && !navalOnly) {return false;}
-      if (isVehicle && !airborne && !t.drivable) {return false;}
+      if (!airborne && t.movementCosts[mvmtType] == -1) {return false;}
       if (tx == x && ty == y) {return true;}
-      if (add) {steps += t.drivable ? 1 : 2;}
+      if (add) {steps += (airborne ?  1 : (t.movementCosts[mvmtType]));}
     } else {if (add) {steps++;}}
-    if (steps >= maxSteps) {return false;}
+    if (steps > maxSteps) {return false;}
     return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,true,checkTerrain,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,true,checkTerrain,checkAtAll) || 
     checkMvmtRange_rec(tx,ty-1,steps,maxSteps,true,checkTerrain,checkAtAll) || checkMvmtRange_rec(tx,ty+1,steps,maxSteps,true,checkTerrain,checkAtAll);
   }

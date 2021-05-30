@@ -41,11 +41,11 @@ class Cursor {
           fill(128,128,128,75);
           break;
       }
-      rect(pos_x*scale*16,pos_y*scale*16,scale*16,scale*16);
+      rect((pos_x+m.left_view)*scale*16,(pos_y+m.top_view)*scale*16,scale*16,scale*16);
     }
     
     if (selected != null) {selected.displayRange(false,false);}
-    s[frame/15].draw(((AttackCursor ? -5 : -3) * scale)+pos_x*scale*16,((AttackCursor ? -5 : -4) * scale)+pos_y*scale*16,scale,false);   
+    s[frame/15].draw(((AttackCursor ? -5 : -3) * scale)+(pos_x+m.left_view)*scale*16,((AttackCursor ? -5 : -4) * scale)+(pos_y+m.top_view)*scale*16,scale,false);   
     if (t) {frame = (frame + (AttackCursor ? 3 : 2)) % 60;}
   }
 }
