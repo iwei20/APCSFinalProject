@@ -35,7 +35,7 @@ void parseInput() {
             //m.getCursor().selected = null; 
             inCombatMenu = false;
             m.nextTurn();
-            break; //<>// //<>//
+            break; //<>//
             
         }
         if (selectedAction.equals("Wait")) {
