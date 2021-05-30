@@ -16,3 +16,5 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 - Cameron - Aligned units to scrolling, implemented better displayRange() method with actual checks, wrote menuOption() and menuCursor() classes, imported some more graphics, improved displayRange() to also support attack range checks (not fully done yet).
 <h3> 5/28/2021 </h3>
 - Cameron - finished displayRange(), implemented methods to allow you to attack, added unit damage chart/table, added damage formula for calcPower() method.
+<h3> 5/29/2021 </h3>
+- Ivan - Hopefully created final fixes to map scrolling, created an animated battle preview, expanded the testing map, added the Advance Wars font and imported textures for city, horizontal and vertical roads
