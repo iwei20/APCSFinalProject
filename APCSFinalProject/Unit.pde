@@ -30,13 +30,12 @@ public class Unit {
     this.health = 10;
     this.index = type;
     this.team = team;
-    this.mvmtType = (index >= 24) ? 3 : ((index == 2 || index == 3) ? 0 : (index == 1) ? 2 : 1);
-    this.mvmtRange = ((index >= 2 && index <= 3) ? (index == 2 ? 2 : 3) : 5);
+    this.mvmtType = (index >= 24) ? 3 : ((index == 2 || index == 3) ? 0 : (index == 1 || index == 12 || index == 13) ? 2 : 1);
+    this.mvmtRange = mvmtRanges[index];
     this.attackRangeMin = (index >= 12 && index <= 14) ? (index == 14 ? 2 : 3) : 0;
     this.attackRangeMax = (index >= 12 && index <= 14) ? (index == 14 ? 3 : 5) : 1;
     this.airborne = index >= 16 && index <= 19;
-    this.isVehicle = index == 0 || (index >= 8 && index <= 14);
-    this.stationary = index == 12;
+    this.stationary = false;
     this.canAttack = !(index == 0 || index == 16);
     this.canAttackAndMove = !(index == 8 || index == 9 || (index >= 12 && index <= 14));
     this.unitsCanTransport = (index == 0 || index == 16 || index == 24) ? (index == 24 ? 2 : 1) : 0;   
@@ -66,7 +65,7 @@ public class Unit {
   }
   public boolean move(int newX, int newY) {
     if (stationary) {return false;}
-    if ((newX != x || newY != y) && (takenAction || !checkMvmtRange_rec(newX,newY,0,mvmtRange,false,true,true) || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length))) {
+    if ((newX != x || newY != y) && (takenAction || !checkMvmtRange_rec(newX,newY,0,mvmtRange,true) || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length))) {
       return false;
     } else {
       m.board[y][x].occupying = null;
@@ -83,7 +82,7 @@ public class Unit {
     takenAction = true;  
   }
   public float calcPower(Unit a, Unit b) {
-    if (!(a.attackRangeMin != 0 && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMin-1,false,false,false)) && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMax,false,false,false)) {   
+    if (!(a.attackRangeMin != 0 && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMin-1,false)) && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMax,false)) {   
       /* this should do calculations */
       float t = damageChart[b.index][a.index] * a.health * .1;
       if (t <= 0) {return 0;}
@@ -99,9 +98,9 @@ public class Unit {
     println(otherPower);
     
     /* deal 3/4's the damage, then 1/4 */
-    other.health -= thisPower * (3.0/4.0);
+    other.health -= thisPower * (.75);
     if (other.health > 0) {
-      this.health -= otherPower * (3.0/4.0);
+      this.health -= otherPower * (.75);
     }
     other.health -= thisPower / 4.0;
     if (other.health > 0) {
@@ -111,6 +110,7 @@ public class Unit {
     return thisPower;
   }
   public void displayRange(boolean tint, boolean attack) {
+    //int temp;
     stroke(255);
     if (tint) {
       switch(team) {
@@ -133,6 +133,7 @@ public class Unit {
     } else {
       fill(0,180,0,75);  
     }
+    //temp = g.fillColor;
     int yMin = max(0,y-mvmtRange-attackRangeMax-1); int yMax = min(m.board.length-1,y+mvmtRange+attackRangeMax+1);
     int xMin = max(0,x-mvmtRange-attackRangeMax-1); int xMax = min(m.board[0].length-1,x+mvmtRange+attackRangeMax+1);
     boolean[][] drawnYet = new boolean[yMax-yMin+1][xMax-xMin+1];
@@ -140,17 +141,18 @@ public class Unit {
     for (int j = yMin; j <= yMax; j++) {
       for (int i = xMin; i <= xMax; i++) {
         if (!attack) {
-          if (checkMvmtRange_rec(i,j,0,mvmtRange,false,true,true)) {
+          if (checkMvmtRange_rec(i,j,0,mvmtRange,true)) {
             rect(scale*(i+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
             if (i == x && y == j) {render();} else {
+              //fill(0);
               //textSize(20);
               //text("" + m.getTile(i,j).getTerrain().movementCosts[mvmtType],scale*(i+m.left_view)*16+8*scale,scale*(j+m.top_view)*16+8*scale);
-              //println((scale*(j+m.left_view)*16+8*scale) + " " + (scale*(j+m.top_view)*16+8*scale) + " " + m.getTile(i,j).getTerrain().movementCosts[mvmtType]);
+              //fill(temp);
             }
           }
         }
         else if (canAttack) {
-          if (canAttackAndMove ? checkMvmtRange_rec(i,j,0,mvmtRange,false,false,true) : 
+          if (canAttackAndMove ? checkMvmtRange_rec(i,j,0,mvmtRange,true) : 
           (abs(j-y) + abs(i-x) >= attackRangeMin && abs(j-y) + abs(i-x) <= attackRangeMax)) {
             if (!drawnYet[j-yMin][i-xMin]) {
               rect(scale*(i+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
@@ -184,19 +186,21 @@ public class Unit {
       }
     }
   }
-  private boolean checkMvmtRange_rec(int tx, int ty, int steps, int maxSteps, boolean add, boolean checkFlag, boolean checkAtAll) {
+  private boolean checkMvmtRange_rec(int tx, int ty, int steps, int maxSteps, boolean checkAtAll) {
     if (ty < 0 || ty >= m.board.length || tx < 0 || tx >= m.board[0].length) {return false;}
-    if (tx == x && ty == y) {return true;}
+    if (tx == x && ty == y) {
+      return true;
+    }
     Terrain t = m.board[ty][tx].getTerrain();
     if (checkAtAll) {
-      if (!airborne && t.movementCosts[mvmtType] == -1) {return false;}
-      if (add) {steps += (airborne ?  1 : t.movementCosts[mvmtType]);}
-    } else {if (add) {steps++;}}
-    if (steps >= maxSteps) {
+      if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>//
+      steps += (airborne ?  1 : t.movementCosts[mvmtType]); //<>//
+    } else {steps++;}
+    if (steps > maxSteps) { //<>//
       return false;
     }
-    return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,true,checkFlag,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,true,checkFlag,checkAtAll) || 
-    checkMvmtRange_rec(tx,ty-1,steps,maxSteps,true,checkFlag,checkAtAll) || checkMvmtRange_rec(tx,ty+1,steps,maxSteps,true,checkFlag,checkAtAll);
+    return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,checkAtAll) || 
+    checkMvmtRange_rec(tx,ty-1,steps,maxSteps,checkAtAll) || checkMvmtRange_rec(tx,ty+1,steps,maxSteps,checkAtAll);
   }
   public ArrayList<Unit> checkUnitsInRange() {
     ArrayList<Unit> yesunits = new ArrayList();  

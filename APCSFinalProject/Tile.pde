@@ -1,10 +1,15 @@
 public class Tile {
   Terrain t;
   Unit occupying;
+  Captureable base;
   
   public Tile(int type) {
     t = new Terrain(type);
     occupying = null;
+    base = null;
+    if (type >= 8 && type <= 10) {
+        
+    }
   }
   
   public Terrain getTerrain() {

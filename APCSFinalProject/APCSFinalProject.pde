@@ -6,8 +6,9 @@ boolean unitExploding;
 final int scale = 2;
 Unit showRange = null;
 boolean inCombatMenu = false;
-int[] playerTeams = new int[]{0,2};
+int[] mvmtRanges = new int[]{6,8,2,3,-1,-1,-1,-1,-1,6,4,5,4,4,4,-1,6,6,7,9,-1,-1,-1,-1,5,4,6,5};
 /* damageChart[defender][attacker] */
+int[] playerTeams = new int[]{0,2};
 int[][] damageChart;
 
 void setup() {
