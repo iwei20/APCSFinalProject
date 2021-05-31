@@ -118,4 +118,8 @@ public class Map {
       if (framesSinceNewTurn >= 90) {framesSinceNewTurn = -1;}
     }
   }
+  
+  public void win(int player) {
+    println("Player" + (player+1) + " wins!");
+  }
 }

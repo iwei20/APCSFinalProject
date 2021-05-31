@@ -1,13 +1,15 @@
 public class Captureable {
   int hp;
   int team; 
+  boolean critical;
   Unit capturing;
   Sprite s;
   
-  public Captureable(int t) {
+  public Captureable(int t, boolean ishq) {
     hp = 20;
     team = t;
     capturing = null;
+    critical = ishq;
     String c = "";
     switch(t) {
       case -1:
@@ -20,7 +22,7 @@ public class Captureable {
         c = "Blue";
         break;
     }
-    s = new Sprite("tiles/" + c + "Base.png");
+    s = new Sprite("tiles/" + c + (ishq ? "HQ.png" : "Base.png"));
   }
   public void shallowCopy(Captureable a, Captureable b) {
     b.hp = a.hp;
@@ -38,7 +40,8 @@ public class Captureable {
     capturing = u;
     hp -= ceil(u.health);
     if (hp <= 0) {
-      Captureable c = new Captureable(u.team);
+      Captureable c = new Captureable(u.team,critical);
+      if (critical) {m.win(u.team == playerTeams[0] ? 0 : 1);}
       shallowCopy(c,this);
       u.capturing = null;
     }

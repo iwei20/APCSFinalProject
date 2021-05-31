@@ -81,6 +81,14 @@ public class Terrain {
         s = new Sprite("tiles/GrayBase.png");
         movementCosts = new int[]{1,1,1,-1};
         break;
+      case 11: // red base
+      case 12: // base base
+        drivable = true;
+        ocean = false;
+        defense = 3;
+        s = new Sprite("tiles/GrayBase.png");
+        movementCosts = new int[]{1,1,1,-1};
+        break;
         
     }
   }
