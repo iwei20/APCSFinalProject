@@ -73,24 +73,12 @@ public class Terrain {
         movementCosts = new int[]{2,-1,-1,-1};
         break;
       case 8: // neutral base
-        drivable = true;
-        ocean = false;
-        defense = 3;
-        s = new Sprite("tiles/Plains.png");
-        movementCosts = new int[]{1,1,1,-1};
-        break;
       case 9: // red base
-        drivable = true;
-        ocean = false;
-        defense = 3;
-        s = new Sprite("tiles/Plains.png");
-        movementCosts = new int[]{1,1,1,-1};
-        break;
       case 10: // base base
         drivable = true;
         ocean = false;
         defense = 3;
-        s = new Sprite("tiles/Plains.png");
+        s = new Sprite("tiles/GrayBase.png");
         movementCosts = new int[]{1,1,1,-1};
         break;
         
