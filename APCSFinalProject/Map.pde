@@ -109,14 +109,28 @@ public class Map {
       }
     }
     //"sprites"
-    if (!unitExploding && !inCombatMenu && c != null) {c.render(true, c.x, c.y);}
-    if (inCombatMenu && combatMenu != null) {combatMenu.render();}
+    if (!unitExploding) {
+      if (pUnits.size() == 0) {win(1);}
+      if (eUnits.size() == 0) {win(0);}
+      
+      if (!inCombatMenu && c != null) {c.render(true, c.x, c.y);}
+    }
     
     if (framesSinceNewTurn >= 0) {
       framesSinceNewTurn++;
-      teamIcons[whoseTurn].draw(width/32,height/32,scale);
       if (framesSinceNewTurn >= 90) {framesSinceNewTurn = -1;}
+      teamIcons[whoseTurn].draw(width/32,height/32,scale);
+      
+      int xd = width/32+scale*51;
+      for (char c : ((turns/2+1) + "").toCharArray()) {
+        numberSprites[c-0x30].draw(xd,height/32+7*scale,scale);
+        xd += 7*scale;
+      }
     }
+    
+    // menu
+    if (inCombatMenu && combatMenu != null) {combatMenu.render();}
+    
   }
   
   public void win(int player) {

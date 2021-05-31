@@ -3,6 +3,7 @@ Sprite[] healthIcons;
 Sprite[] captureIcons;
 Sprite[] teamIcons;
 Sprite[] explosionFrames; 
+Sprite[] numberSprites;
 PFont aw2font;
 boolean unitExploding;
 final int scale = 2;
@@ -19,6 +20,10 @@ void setup() {
   healthIcons = new Sprite[9];
   for (int i = 0; i < healthIcons.length; i++) {
     healthIcons[i] = new Sprite("icons/" + (i+1) + ".png");
+  }
+  numberSprites = new Sprite[10];
+  for (int i = 0; i < numberSprites.length; i++) {
+    numberSprites[i] = new Sprite("icons/number_" + i + ".png");
   }
   captureIcons = new Sprite[5];
   captureIcons[0] = new Sprite("icons/t0_Capture.png");
@@ -51,10 +56,10 @@ void setup() {
     0,4,4,6,3,6,2,4,4,7,7,4,4,5,5,0,
     0,6,6,4,4,4,2,4,7,7,7,6,7,4,5,0,
     0,4,2,4,9,4,9,7,7,7,7,7,4,6,2,0,
-    0,0,2,3,3,9,9,7,7,7,7,7,4,4,2,0,
+    0,0,2,3,3,9,11,7,7,7,7,7,4,4,2,0,
     0,0,2,4,4,9,7,7,7,7,7,4,7,8,2,0,
     0,4,2,6,4,7,7,7,7,7,4,10,4,4,2,0,
-    0,6,2,4,4,7,7,7,7,7,10,10,3,3,2,0,
+    0,6,2,4,4,7,7,7,7,7,10,12,3,3,2,0,
     0,5,5,7,7,7,7,7,7,4,4,10,4,4,0,0,
     0,5,5,7,7,7,7,4,4,4,4,2,4,10,0,0,
     0,5,5,4,4,7,4,5,4,4,6,2,6,4,4,0,
