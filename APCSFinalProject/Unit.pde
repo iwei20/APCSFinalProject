@@ -53,7 +53,7 @@ public class Unit {
     this.lastX = -1;
     this.lastY = -1;
     this.takenAction = false;
-    if (restore && false) {health = min(10,health+2);}
+    if (restore && m.getTile(x,y).base != null && m.getTile(x,y).base.team == this.team) {health = min(10,health+2);}
   }
   public void undoMove() {
     m.board[y][x].occupying = null;
@@ -62,12 +62,14 @@ public class Unit {
     y = lastY;
     lastY = -1;
     m.board[y][x].occupying = this;
+    if (m.board[y][x].base != null) {m.board[y][x].base.capturing = this;}
   }
   public boolean move(int newX, int newY) {
     if (stationary) {return false;}
     if ((newX != x || newY != y) && (takenAction || !checkMvmtRange_rec(newX,newY,0,mvmtRange,true) || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length))) {
       return false;
     } else {
+      if (m.board[y][x].base != null && newX != x && newY != y) {m.board[y][x].base.capturing = null;}
       m.board[y][x].occupying = null;
       this.lastX = this.x;
       this.x = newX;
@@ -193,10 +195,10 @@ public class Unit {
     }
     Terrain t = m.board[ty][tx].getTerrain();
     if (checkAtAll) {
-      if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>//
-      steps += (airborne ?  1 : t.movementCosts[mvmtType]); //<>//
+      if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>// //<>//
+      steps += (airborne ?  1 : t.movementCosts[mvmtType]); //<>// //<>//
     } else {steps++;}
-    if (steps > maxSteps) { //<>//
+    if (steps > maxSteps) { //<>// //<>//
       return false;
     }
     return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,checkAtAll) || 

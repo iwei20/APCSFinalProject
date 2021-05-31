@@ -8,20 +8,42 @@ public class Captureable {
     hp = 20;
     team = t;
     capturing = null;
-    s = new Sprite("tiles/" + (t == -1 ? "Gray" : (t == 0 ? "Red" : "Blue")) + "Base.png");
+    String c = "";
+    switch(t) {
+      case -1:
+        c = "Neutral";
+        break;
+      case 0:
+        c = "Red";
+        break;
+      case 2:
+        c = "Blue";
+        break;
+    }
+    s = new Sprite("tiles/" + c + "Base.png");
+  }
+  public void shallowCopy(Captureable a, Captureable b) {
+    b.hp = a.hp;
+    b.team = a.team;
+    b.capturing = a.capturing;
+    b.s = a.s;
   }
   
-  boolean canCapture(Unit u) {
+  boolean canBeCaptured(Unit u) {
     return (u.index == 2 || u.index == 3) && this.team != u.team;
   }
   int capt(Unit u) {
     if (u != capturing) {hp = 20;}
+    capturing = u;
     hp -= ceil(u.health);
-    if (hp <= 0) {team = u.team;}
+    if (hp <= 0) {
+      Captureable c = new Captureable(u.team);
+      shallowCopy(c,this);
+    }
     return team;  
   }
   
-  public void render(int pos_x, int pos_y,int layer) {
-    s.draw(pos_x*scale*16,pos_y*scale*16,scale);
+  public void render(int pos_x, int pos_y) {
+    s.draw(pos_x*scale*16,(pos_y-1)*scale*16,scale);
   }
 }
