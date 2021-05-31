@@ -19,3 +19,5 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 <h3> 5/29/2021 </h3>
 - Ivan - Hopefully created final fixes to map scrolling, created an animated battle preview, expanded the testing map, added the Advance Wars font and imported textures for city, horizontal and vertical roads
 - Cameron - finally got displayRange() to display the right info, added better movement penalities for different types of units, started work on Captureable class
+<h3> 5/30/2021 </h3>
+- Cameron - worked on Captureable class, created new graphics as well.
