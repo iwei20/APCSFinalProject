@@ -8,7 +8,7 @@ public class Tile {
     occupying = null;
     base = null;
     if (type >= 8 && type <= 12) {
-      base = new Captureable((type - 8) % 3 == 0 ? -1 : playerTeams[(type - 9) % 2],type >= 11);    
+      base = new Captureable(type == 8 ? -1 : playerTeams[(type - 9) % 2],type >= 11);    
     }
   }
   
