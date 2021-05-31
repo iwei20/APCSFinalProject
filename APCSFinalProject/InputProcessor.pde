@@ -26,6 +26,9 @@ void parseInput() {
           case "Fire":
             m.combatMenu.initSelection(m.getCursor().selected, possibleAttacks);
             break;
+          case "Capt":
+            if (m.getTile(m.getCursor().selected.x,m.getCursor().selected.y).enactCapt()) {selectedAction = "Wait";}
+            break;
           case "Unit":
           case "Save":
           case "Options":
@@ -126,7 +129,7 @@ void parseInput() {
         if(m.getCursor().selected.move(m.getCursor().x,m.getCursor().y)) {
           inCombatMenu = true;
           possibleAttacks = m.getCursor().selected.checkUnitsInRange();
-          m.combatMenu = new MenuOption(possibleAttacks.size() > 0,false,false);
+          m.combatMenu = new MenuOption(possibleAttacks.size() > 0,m.getTile(m.getCursor().selected.x,m.getCursor().selected.y).baseCanCapt(),false,false);
           //m.getCursor().selected = null; 
           //m.getCursor().Iactive = false;
         }

@@ -11,7 +11,7 @@ class MenuOption {
   Cursor unit_cursor;
   int selectedUnit;
   
-  public MenuOption(boolean canFire, boolean canLoad, boolean canDrop) {
+  public MenuOption(boolean canFire, boolean canCapt, boolean canLoad, boolean canDrop) {
     unit_cursor = null;
     unitTargets = null;
     
@@ -20,7 +20,7 @@ class MenuOption {
     
     cursor_y = 0;
     cursor = new MenuCursor();
-    switch ((canFire ? 1 : 0) + (canLoad ? 2 : 0) + (canDrop ? 4 : 0)) {
+    switch ((canFire ? 1 : 0) + (canCapt ? 2 : 0) + (canLoad ? 4 : 0) + (canDrop ? 8 : 0)) {
       case 0:
         s = new Sprite("GUI/WaitMenu.png");
         options = new String[]{"Wait"};
@@ -28,6 +28,14 @@ class MenuOption {
       case 1:
         s = new Sprite("GUI/FireMenu.png");
         options = new String[]{"Fire","Wait"};
+        break;
+      case 2:
+        s = new Sprite("GUI/CaptWaitMenu.png");
+        options = new String[]{"Capt","Wait"};
+        break;
+      case 3:
+        s = new Sprite("GUI/FireCaptMenu.png");
+        options = new String[]{"Fire","Capt","Wait"};
         break;
     }
     dp = new DamagePreview(null, null);
