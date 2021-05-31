@@ -33,12 +33,14 @@ public class Captureable {
     return (u.index == 2 || u.index == 3) && this.team != u.team;
   }
   int capt(Unit u) {
+    u.capturing = this;
     if (u != capturing) {hp = 20;}
     capturing = u;
     hp -= ceil(u.health);
     if (hp <= 0) {
       Captureable c = new Captureable(u.team);
       shallowCopy(c,this);
+      u.capturing = null;
     }
     return team;  
   }

@@ -7,6 +7,7 @@ public class Unit {
   int exploding; // for explode animation when units are destroyed
   
   // combat variables //
+  Captureable lastCapture, capturing;
   float health;
   int mvmtType; // 0 = on foot, 1 = treads, 2 = tires
   int mvmtRange;
@@ -26,6 +27,7 @@ public class Unit {
     this.lastX = -1;
     this.lastY = -1;
     this.exploding = -1;
+    this.capturing = null;
     m.board[y][x].occupying = this;
     this.health = 10;
     this.index = type;
@@ -52,6 +54,7 @@ public class Unit {
   public void newTurn(boolean restore) {
     this.lastX = -1;
     this.lastY = -1;
+    this.lastCapture = null;
     this.takenAction = false;
     if (restore && m.getTile(x,y).base != null && m.getTile(x,y).base.team == this.team) {health = min(10,health+2);}
   }
@@ -61,6 +64,8 @@ public class Unit {
     lastX = -1;
     y = lastY;
     lastY = -1;
+    capturing = lastCapture;
+    lastCapture = null;
     m.board[y][x].occupying = this;
     if (m.board[y][x].base != null) {m.board[y][x].base.capturing = this;}
   }
@@ -75,6 +80,8 @@ public class Unit {
       this.x = newX;
       this.lastY = this.y;
       this.y = newY;
+      this.lastCapture = this.capturing;
+      this.capturing = null;
       m.board[y][x].occupying = this;
       //this.takenAction = true;
       return true;
@@ -195,10 +202,10 @@ public class Unit {
     }
     Terrain t = m.board[ty][tx].getTerrain();
     if (checkAtAll) {
-      if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>// //<>//
-      steps += (airborne ?  1 : t.movementCosts[mvmtType]); //<>// //<>//
+      if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>//
+      steps += (airborne ?  1 : t.movementCosts[mvmtType]); //<>//
     } else {steps++;}
-    if (steps > maxSteps) { //<>// //<>//
+    if (steps > maxSteps) { //<>//
       return false;
     }
     return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,checkAtAll) || 
@@ -227,6 +234,9 @@ public class Unit {
         }
         if (ceil(health) < 10) {
           healthIcons[ceil(health)-1].draw(scale*x*16+8*scale,scale*y*16+9*scale,scale,false,true);
+        }
+        if (capturing != null) {
+          captureIcons[team].draw(scale*x*16,scale*y*16+8*scale,scale,false,true);
         }
       } else {
         unitExploding = true;

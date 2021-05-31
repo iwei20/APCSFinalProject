@@ -1,5 +1,6 @@
 Map m;
 Sprite[] healthIcons;
+Sprite[] captureIcons;
 Sprite[] explosionFrames; 
 PFont aw2font;
 boolean unitExploding;
@@ -18,6 +19,9 @@ void setup() {
   for (int i = 0; i < healthIcons.length; i++) {
     healthIcons[i] = new Sprite("icons/" + (i+1) + ".png");
   }
+  captureIcons = new Sprite[5];
+  captureIcons[0] = new Sprite("icons/t0_Capture.png");
+  captureIcons[2] = new Sprite("icons/t2_Capture.png");
   explosionFrames = new Sprite[9];
   for (int i = 0; i < explosionFrames.length; i++) {
     explosionFrames[i] = new Sprite("ExplosionFrame" + i + ".png");
