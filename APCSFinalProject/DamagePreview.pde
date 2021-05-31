@@ -33,14 +33,14 @@ class DamagePreview {
     noStroke();
     fill(180, 180, 180, 200);
     rect(10, height - 90, 130, 80);
-    target.s.draw(85, height - 90, 3);
-    m.board[target.x][target.y].getTerrain().s.draw(25, height - 80, 2);
-    heart.draw(85, height - 38, 2);
+    target.s.draw(85, height - 90, scale+1);
+    m.getTile(target.x,target.y).getTerrain().s.draw(25, height - 80, scale); //<>//
+    heart.draw(85, height - 38, scale);
 
     fill(255, 255, 255);
     textSize(16);
     textAlign(LEFT);
-    text("DEF " + m.board[target.y][target.x].getTerrain().defense, 27, height - 30);
+    text("DEF " + m.getTile(target.x,target.y).getTerrain().defense, 27, height - 30);
     textSize(20);
     text(ceil(target.health), 102, height - 26);
 
