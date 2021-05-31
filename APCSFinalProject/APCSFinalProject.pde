@@ -1,6 +1,7 @@
 Map m;
 Sprite[] healthIcons;
 Sprite[] captureIcons;
+Sprite[] teamIcons;
 Sprite[] explosionFrames; 
 PFont aw2font;
 boolean unitExploding;
@@ -22,6 +23,10 @@ void setup() {
   captureIcons = new Sprite[5];
   captureIcons[0] = new Sprite("icons/t0_Capture.png");
   captureIcons[2] = new Sprite("icons/t2_Capture.png");
+  teamIcons = new Sprite[4];
+  for (int i = 0; i < teamIcons.length; i++) {
+    teamIcons[i] = new Sprite("teams/t" + i + "_newturn.png");
+  }
   explosionFrames = new Sprite[9];
   for (int i = 0; i < explosionFrames.length; i++) {
     explosionFrames[i] = new Sprite("ExplosionFrame" + i + ".png");
@@ -56,7 +61,8 @@ void setup() {
     0,4,5,6,6,5,5,5,4,6,4,2,4,4,6,0,
     0,6,5,5,5,5,5,0,5,3,3,3,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-  }); 
+  });
+  m.newTurn();
   // load Damage Chart 
   damageChart = new int[28][28];
   byte[] temp = loadBytes("damageChart.dat");

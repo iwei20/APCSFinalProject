@@ -2,7 +2,9 @@ public class Map {
   int top_view, left_view;
   private Cursor c;
   MenuOption combatMenu;
+  int turns;
   int whoseTurn;
+  int framesSinceNewTurn;
   Tile[][] board;
   private ArrayList<Unit> pUnits, eUnits;
   
@@ -11,6 +13,7 @@ public class Map {
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     whoseTurn = playerTeams[0];
+    turns = 0;
     board = new Tile[cols][rows];
     top_view = 0; left_view = 0; 
   }
@@ -25,6 +28,7 @@ public class Map {
   public Map(byte[] data) {
     c = new Cursor(false);
     whoseTurn = playerTeams[0];
+    turns = 0;
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     board = new Tile[data[0]][data[1]];
@@ -59,6 +63,11 @@ public class Map {
     for (int i = 0; i < eUnits.size(); i++) {
       eUnits.get(i).newTurn(whoseTurn == playerTeams[1]); 
     }
+    turns++;
+    newTurn();
+  }
+  public void newTurn() {
+    framesSinceNewTurn = 0;  
   }
   public Tile getTile(int x, int y) {
     return board[y][x];
@@ -102,5 +111,11 @@ public class Map {
     //"sprites"
     if (!unitExploding && !inCombatMenu && c != null) {c.render(true, c.x, c.y);}
     if (inCombatMenu && combatMenu != null) {combatMenu.render();}
+    
+    if (framesSinceNewTurn >= 0) {
+      framesSinceNewTurn++;
+      teamIcons[whoseTurn].draw(width/32,height/32,scale);
+      if (framesSinceNewTurn >= 90) {framesSinceNewTurn = -1;}
+    }
   }
 }
