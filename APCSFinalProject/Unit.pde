@@ -151,7 +151,7 @@ public class Unit {
     for (int j = yMin; j <= yMax; j++) {
       for (int i = xMin; i <= xMax; i++) {
         if (!attack) {
-          if (checkMvmtRange_rec(i,j,0,mvmtRange,true)) {
+          if (airborne ? (abs(j-y) + abs(i-x) <= mvmtRange) : checkMvmtRange_rec(i,j,0,mvmtRange,true)) {
             rect(scale*(i+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
             if (i == x && y == j) {render();} else {
               //fill(0);
@@ -162,8 +162,8 @@ public class Unit {
           }
         }
         else if (canAttack) {
-          if (canAttackAndMove ? checkMvmtRange_rec(i,j,0,mvmtRange,true) : 
-          (abs(j-y) + abs(i-x) >= attackRangeMin && abs(j-y) + abs(i-x) <= attackRangeMax)) {
+          if (canAttackAndMove && !airborne ? checkMvmtRange_rec(i,j,0,mvmtRange,true) : 
+          (abs(j-y) + abs(i-x) >= attackRangeMin && abs(j-y) + abs(i-x) <= (airborne ? mvmtRange : attackRangeMax))) {
             if (!drawnYet[j-yMin][i-xMin]) {
               rect(scale*(i+m.left_view)*16,scale*(j+m.top_view)*16,scale*16,scale*16);
               drawnYet[j-yMin][i-xMin] = true;
