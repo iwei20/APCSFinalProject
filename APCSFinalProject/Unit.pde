@@ -38,6 +38,7 @@ public class Unit {
     this.attackRangeMax = (index >= 12 && index <= 14) ? (index == 14 ? 3 : 5) : 1;
     this.airborne = index >= 16 && index <= 19;
     this.stationary = false;
+    this.isVehicle = index >= 9 && index <= 14;
     this.canAttack = !(index == 0 || index == 16);
     this.canAttackAndMove = !(index == 8 || index == 9 || (index >= 12 && index <= 14));
     this.unitsCanTransport = (index == 0 || index == 16 || index == 24) ? (index == 24 ? 2 : 1) : 0;   
@@ -201,6 +202,7 @@ public class Unit {
       return true;
     }
     Terrain t = m.board[ty][tx].getTerrain();
+    if (isVehicle && !airborne && m.board[ty][tx].occupying != null && !m.board[ty][tx].occupying.airborne) {return false;}
     if (checkAtAll) {
       if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>//
       steps += (airborne ?  1 : max(t.movementCosts[mvmtType] - (t.movementCosts[mvmtType] + steps > maxSteps? 1 : 0),1)); //<>//
