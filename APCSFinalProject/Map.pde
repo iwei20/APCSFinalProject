@@ -2,11 +2,13 @@ public class Map {
   int top_view, left_view;
   private Cursor c;
   MenuOption combatMenu;
+  ProductionMenu pMenu;
   int turns;
   int whoseTurn;
   int framesSinceNewTurn;
   boolean gameOver;
   Tile[][] board;
+  int[] money;
   private ArrayList<Unit> pUnits, eUnits;
   
   public Map(int rows, int cols) {
@@ -35,7 +37,10 @@ public class Map {
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     board = new Tile[data[0]][data[1]];
-
+    pMenu = new ProductionMenu();
+    money = new int[3];
+    money[0] = money[2] = 10000;
+    
     top_view = 0;left_view = 0;
     int l;
     for (l = 2; data[l] != -128; l += 3) {}
@@ -116,7 +121,7 @@ public class Map {
       if (pUnits.size() == 0) {win(1);}
       if (eUnits.size() == 0) {win(0);}
       
-      if (!inCombatMenu && c != null) {c.render(true, c.x, c.y);}
+      if (!inCombatMenu && c != null && !pMenu.active) {c.render(true, c.x, c.y);}
     }
     
     if (framesSinceNewTurn >= 0) {
@@ -133,6 +138,7 @@ public class Map {
     
     // menu
     if (inCombatMenu && combatMenu != null) {combatMenu.render();}
+    if(pMenu != null && pMenu.active) pMenu.render();
     
   }
   

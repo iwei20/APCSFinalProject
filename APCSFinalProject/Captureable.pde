@@ -2,10 +2,11 @@ public class Captureable {
   int hp;
   int team; 
   boolean critical;
+  boolean canProduce;
   Unit capturing;
   Sprite s;
   
-  public Captureable(int t, boolean ishq) {
+  public Captureable(int t, boolean ishq, boolean canProduce) {
     hp = 20;
     team = t;
     capturing = null;
@@ -31,6 +32,14 @@ public class Captureable {
     b.s = a.s;
   }
   
+  void openProduction(int x, int y) {
+    // Open production menu
+    if(canProduce) {
+      m.pMenu.setTarget(x, y);
+      m.pMenu.active = true;
+    }
+  }
+  
   boolean canBeCaptured(Unit u) {
     return (u.index == 2 || u.index == 3) && this.team != u.team;
   }
@@ -40,7 +49,7 @@ public class Captureable {
     capturing = u;
     hp -= ceil(u.health);
     if (hp <= 0) {
-      Captureable c = new Captureable(u.team,critical);
+      Captureable c = new Captureable(u.team,critical, canProduce);
       if (critical) {m.win(u.team == playerTeams[0] ? 0 : 1);}
       shallowCopy(c,this);
       u.capturing = null;
