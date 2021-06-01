@@ -21,3 +21,5 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 - Cameron - finally got displayRange() to display the right info, added better movement penalities for different types of units, started work on Captureable class
 <h3> 5/30/2021 </h3>
 - Cameron - worked on Captureable class, created new graphics as well.
+<h3> 5/31/2021 </h3>
+- Cameron - created new map, made it so that vehicules cant run over other units, changed how movment works otherwise to be closer to the game, made turn number and player appear at the beginning of each turn.
