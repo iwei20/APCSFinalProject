@@ -5,6 +5,7 @@ public class Map {
   int turns;
   int whoseTurn;
   int framesSinceNewTurn;
+  boolean gameOver;
   Tile[][] board;
   private ArrayList<Unit> pUnits, eUnits;
   
@@ -16,6 +17,7 @@ public class Map {
     turns = 0;
     board = new Tile[cols][rows];
     top_view = 0; left_view = 0; 
+    gameOver = false;
   }
   /* 
   Map data format: 
@@ -29,6 +31,7 @@ public class Map {
     c = new Cursor(false);
     whoseTurn = playerTeams[0];
     turns = 0;
+    gameOver = false;
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     board = new Tile[data[0]][data[1]];
@@ -109,7 +112,7 @@ public class Map {
       }
     }
     //"sprites"
-    if (!unitExploding) {
+    if (!unitExploding && !gameOver) {
       if (pUnits.size() == 0) {win(1);}
       if (eUnits.size() == 0) {win(0);}
       
@@ -134,6 +137,7 @@ public class Map {
   }
   
   public void win(int player) {
-    println("Player" + (player+1) + " wins!");
+    gameOver = true;
+    println("Player " + (player+1) + " wins!");
   }
 }
