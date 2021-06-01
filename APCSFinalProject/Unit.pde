@@ -203,11 +203,11 @@ public class Unit {
     Terrain t = m.board[ty][tx].getTerrain();
     if (checkAtAll) {
       if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>//
-      steps += (airborne ?  1 : t.movementCosts[mvmtType]); //<>//
+      steps += (airborne ?  1 : max(t.movementCosts[mvmtType] - (t.movementCosts[mvmtType] + steps > maxSteps? 1 : 0),1)); //<>//
     } else {steps++;}
-    if (steps > maxSteps) { //<>//
+    if (steps > maxSteps) {
       return false;
-    }
+    } //<>//
     return checkMvmtRange_rec(tx+1,ty,steps,maxSteps,checkAtAll) || checkMvmtRange_rec(tx-1,ty,steps,maxSteps,checkAtAll) || 
     checkMvmtRange_rec(tx,ty-1,steps,maxSteps,checkAtAll) || checkMvmtRange_rec(tx,ty+1,steps,maxSteps,checkAtAll);
   }
