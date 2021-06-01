@@ -137,6 +137,7 @@ public class Map {
   }
   
   public void win(int player) {
+    if (gameOver) {return;}
     gameOver = true;
     println("Player " + (player+1) + " wins!");
   }
