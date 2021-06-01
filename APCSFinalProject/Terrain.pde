@@ -74,15 +74,15 @@ public class Terrain {
         break;
       case 8: // neutral base
       case 9: // red base
-      case 10: // base base
+      case 10: // blue base
         drivable = true;
         ocean = false;
         defense = 3;
         s = new Sprite("tiles/GrayBase.png");
         movementCosts = new int[]{1,1,1,-1};
         break;
-      case 11: // red base
-      case 12: // base base
+      case 11: // red hq
+      case 12: // blue hq
         drivable = true;
         ocean = false;
         defense = 3;
