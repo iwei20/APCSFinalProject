@@ -10,6 +10,9 @@ public class Tile {
     if (type >= 8 && type <= 12) {
       base = new Captureable(type == 8 ? -1 : playerTeams[(type - 9) % 2],type >= 11,false);    
     }
+    if (type >= 13 && type <= 15) {
+      base = new Captureable(type == 13 ? -1 : playerTeams[type-14],false,true);  
+    }
   }
   
   public Terrain getTerrain() {
