@@ -23,7 +23,7 @@ public class Captureable {
         c = "Blue";
         break;
     }
-    s = new Sprite("tiles/" + c + (ishq ? "HQ.png" : "Base.png"));
+    s = new Sprite("tiles/" + c + (ishq ? "HQ.png" : (canProduce ? "Base.png" : "City.png")));
   }
   public void shallowCopy(Captureable a, Captureable b) {
     b.hp = a.hp;

@@ -40,7 +40,7 @@ public class Unit {
     this.stationary = false;
     this.isVehicle = index >= 9 && index <= 14;
     this.canAttack = !(index == 0 || index == 16);
-    this.canAttackAndMove = !(index == 8 || index == 9 || (index >= 12 && index <= 14));
+    this.canAttackAndMove = !(index == 8 || (index >= 12 && index <= 14));
     this.unitsCanTransport = (index == 0 || index == 16 || index == 24) ? (index == 24 ? 2 : 1) : 0;   
     this.navalOnly = index >= 24; 
     
@@ -92,7 +92,7 @@ public class Unit {
     takenAction = true;  
   }
   public float calcPower(Unit a, Unit b) {
-    if (!(a.attackRangeMin != 0 && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMin-1,false)) && a.checkMvmtRange_rec(b.x,b.y,0,a.attackRangeMax,false)) {   
+    if (abs(b.x-a.x) + abs(b.y-a.y) >= a.attackRangeMin && abs(b.x-a.x) + abs(b.y-a.y) <= a.attackRangeMax) {   
       /* this should do calculations */
       float t = damageChart[b.index][a.index] * a.health * .1;
       if (t <= 0) {return 0;}
@@ -220,7 +220,7 @@ public class Unit {
     for (int j = max(0,y-attackRangeMax); j <= min(m.board.length-1,y+attackRangeMax); j++) {
       for (int i = max(0,x-attackRangeMax); i <= min(m.board[0].length-1,x+attackRangeMax); i++) {
         if (m.board[j][i].occupying != null && m.board[j][i].occupying.team != this.team && (abs(i-x) + abs(j-y) >= attackRangeMin && abs(i-x) + abs(j-y) <= attackRangeMax)) {
-          if (calcPower(this,m.board[j][i].occupying) != 0) {yesunits.add(m.board[j][i].occupying);}
+          if (calcPower(this,m.board[j][i].occupying) > 0) {yesunits.add(m.board[j][i].occupying);}
         }
       }
     }

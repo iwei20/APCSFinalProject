@@ -78,7 +78,7 @@ public class Terrain {
         drivable = true;
         ocean = false;
         defense = 3;
-        s = new Sprite("tiles/GrayBase.png");
+        s = new Sprite("tiles/GrayCity.png");
         movementCosts = new int[]{1,1,1,-1};
         break;
       case 11: // red hq
@@ -86,7 +86,7 @@ public class Terrain {
         drivable = true;
         ocean = false;
         defense = 3;
-        s = new Sprite("tiles/GrayBase.png");
+        s = new Sprite("tiles/GrayCity.png");
         movementCosts = new int[]{1,1,1,-1};
         break;
         
