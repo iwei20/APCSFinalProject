@@ -38,7 +38,7 @@ void parseInput() {
             //m.getCursor().selected = null; 
             inCombatMenu = false;
             m.nextTurn();
-            break; //<>//
+            break; //<>// //<>//
             
         }
         if (selectedAction.equals("Wait")) {
@@ -120,7 +120,8 @@ void parseInput() {
     if (keyCode == 'I')  {
       if (m.getCursor().selected == null) {
         if (m.getTile(m.getCursor().x,m.getCursor().y).occupying == null) {
-          if(m.getTile(m.getCursor().x, m.getCursor().y).base != null && m.getTile(m.getCursor().x, m.getCursor().y).base.canProduce) {
+          if(m.getTile(m.getCursor().x, m.getCursor().y).base != null && m.getTile(m.getCursor().x, m.getCursor().y).base.canProduce && 
+            m.getTile(m.getCursor().x, m.getCursor().y).base.team == m.whoseTurn) {
             m.getTile(m.getCursor().x, m.getCursor().y).base.openProduction(m.getCursor().x, m.getCursor().y);
           } else {
             inCombatMenu = true;
