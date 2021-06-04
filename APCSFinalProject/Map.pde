@@ -130,6 +130,18 @@ public class Map {
       if (!inCombatMenu && c != null && (pMenu == null || (pMenu != null && !pMenu.active))) {c.render(true, c.x, c.y);}
     }
     
+    int turn_x = width/32; 
+    if(getCursorX() <= width / 64) {
+      turn_x = width - teamIcons[whoseTurn].dat.width * scale - width / 32;
+    }
+    teamIcons[whoseTurn].draw(turn_x, height/32,scale);
+      
+    int xd = turn_x+scale*51;
+    for (char c : ((turns/2+1) + "").toCharArray()) {
+      numberSprites[c-0x30].draw(xd,height/32+7*scale,scale);
+      xd += 7*scale;
+    }
+    /*
     if (framesSinceNewTurn >= 0) {
       framesSinceNewTurn++;
       if (framesSinceNewTurn >= 90) {framesSinceNewTurn = -1;}
@@ -140,7 +152,7 @@ public class Map {
         numberSprites[c-0x30].draw(xd,height/32+7*scale,scale);
         xd += 7*scale;
       }
-    }
+    }*/
     
     // menu
     if (inCombatMenu && combatMenu != null) {combatMenu.render();}
