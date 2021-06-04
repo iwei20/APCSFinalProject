@@ -23,3 +23,8 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 - Cameron - worked on Captureable class, created new graphics as well.
 <h3> 5/31/2021 </h3>
 - Cameron - created new map, made it so that vehicules cant run over other units, changed how movment works otherwise to be closer to the game, made turn number and player appear at the beginning of each turn.
+<h3> 6/3/2021 </h3>
+ - Cameron - created HQ graphics and made player win if its captured
+<h3> 6/3/2021 </h3>
+ - Ivan - created ProductionMenu and allowed it to appear if its selected
+ - Cameron - created Base/Factory graphics, fixed bug to only allow base selection if it is on that side.
