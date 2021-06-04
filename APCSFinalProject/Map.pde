@@ -70,6 +70,13 @@ public class Map {
     for (int i = 0; i < eUnits.size(); i++) {
       eUnits.get(i).newTurn(whoseTurn == playerTeams[1]); 
     }
+    for (int i = 0; i < board.length; ++i) {
+      for (int j = 0; j < board[0].length; ++j) {
+        if(getTile(j, i).base != null) {
+          getTile(j, i).base.hasProduced = false;
+        }
+      }
+    }
     turns++;
     newTurn();
   }

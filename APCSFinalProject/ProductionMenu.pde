@@ -1,4 +1,5 @@
 class ProdOption {
+  int type;
   Sprite unit, unit_grey;
   int cost;
   String name;
@@ -33,6 +34,7 @@ class ProductionMenu {
       
       // Read in sprite and load it
       int spriteIndex = int(dat[0]);
+      next.type = spriteIndex;
       println(spriteIndex);
       next.unit = new Sprite(loadImage("units/t" + m.whoseTurn + "_" + spriteIndex + ".png"));
       println("HI");
@@ -61,8 +63,8 @@ class ProductionMenu {
      this.target_y = target_y;
    }
    
-   void createUnit(int type) {
-     m.board[target_y][target_x].occupying = new Unit(m, target_x, target_y, type, m.whoseTurn);  
+   void createUnit() {
+     m.board[target_y][target_x].occupying = new Unit(m, target_x, target_y, options.get(curr_mc_index).type, m.whoseTurn);  
    }
    
    void render() {
