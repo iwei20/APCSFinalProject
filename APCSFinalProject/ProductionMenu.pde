@@ -57,12 +57,16 @@ class ProductionMenu {
      this.target_y = target_y;
    }
    
-   void createUnit() {
-     m.board[target_y][target_x].occupying = new Unit(m, target_x, target_y, options.get(curr_mc_index).type, m.whoseTurn);
-     m.board[target_y][target_x].occupying.setActionTaken();
-     if(m.whoseTurn == 0) m.pUnits.add(m.board[target_y][target_x].occupying);
-     if(m.whoseTurn == 2) m.eUnits.add(m.board[target_y][target_x].occupying);
-     m.money[m.whoseTurn] -= options.get(curr_mc_index).cost;
+   boolean createUnit() {
+     if(m.money[m.whoseTurn] >= options.get(curr_mc_index).cost) {
+       m.board[target_y][target_x].occupying = new Unit(m, target_x, target_y, options.get(curr_mc_index).type, m.whoseTurn);
+       m.board[target_y][target_x].occupying.setActionTaken();
+       if(m.whoseTurn == 0) m.pUnits.add(m.board[target_y][target_x].occupying);
+       if(m.whoseTurn == 2) m.eUnits.add(m.board[target_y][target_x].occupying);
+       m.money[m.whoseTurn] -= options.get(curr_mc_index).cost;
+       return true;
+     }
+     return false;
    }
    
    void render() {
