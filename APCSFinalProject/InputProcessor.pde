@@ -71,8 +71,25 @@ void parseInput() {
       }
     }
   } else if(m.pMenu != null && m.pMenu.active) {
+    if (keyCode == 'I') {
+      m.pMenu.createUnit();
+      m.getTile(m.pMenu.target_x, m.pMenu.target_y).base.hasProduced = true;
+      m.pMenu.active = false;
+    }
     if (keyCode == 'U') {
       m.pMenu.active = false;
+    }
+    if (keyCode == 'W') {
+      m.pMenu.curr_mc_index--;
+      if(m.pMenu.curr_mc_index < 0) {
+        m.pMenu.curr_mc_index = m.pMenu.options.size() - 1;
+      }
+    }
+    if (keyCode == 'S') {
+      m.pMenu.curr_mc_index++;
+      if(m.pMenu.curr_mc_index >= m.pMenu.options.size() ) {
+        m.pMenu.curr_mc_index = 0;
+      }
     }
   } else if (!unitExploding){
     if (showRange != null) {keyCode = 'U';}
@@ -120,8 +137,10 @@ void parseInput() {
     if (keyCode == 'I')  {
       if (m.getCursor().selected == null) {
         if (m.getTile(m.getCursor().x,m.getCursor().y).occupying == null) {
-          if(m.getTile(m.getCursor().x, m.getCursor().y).base != null && m.getTile(m.getCursor().x, m.getCursor().y).base.canProduce && 
-            m.getTile(m.getCursor().x, m.getCursor().y).base.team == m.whoseTurn) {
+          if(m.getTile(m.getCursor().x, m.getCursor().y).base != null && 
+             m.getTile(m.getCursor().x, m.getCursor().y).base.canProduce &&
+             !m.getTile(m.getCursor().x, m.getCursor().y).base.hasProduced &&
+             m.getTile(m.getCursor().x, m.getCursor().y).base.team == m.whoseTurn) {
             m.getTile(m.getCursor().x, m.getCursor().y).base.openProduction(m.getCursor().x, m.getCursor().y);
           } else {
             inCombatMenu = true;
