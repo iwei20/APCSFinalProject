@@ -107,18 +107,24 @@ public class Map {
   }
   
   public void render() {
+    boolean[] checkUnits = new boolean[5];
+    for (int i = 0; i < checkUnits.length; i++) {checkUnits[i] = false;}
+    
     //background
     for (int layer = 0; layer <= 1; layer++) {
       for (int j = 0; j < board.length; j++) {
         for (int i = 0; i < board[0].length; i++) {
           board[j][i].render(i + left_view,j + top_view,layer);
+          if (board[j][i].base != null && board[j][i].base.canProduce) {
+            checkUnits[board[j][i].base.team] = true;  
+          }
         }  
       }
     }
     //"sprites"
     if (!unitExploding && !gameOver) {
-      if (pUnits.size() == 0) {win(1);}
-      if (eUnits.size() == 0) {win(0);}
+      if (checkUnits[playerTeams[0]] == false && pUnits.size() == 0) {win(1);}
+      if (checkUnits[playerTeams[1]] == false && eUnits.size() == 0) {win(0);}
       
       if (!inCombatMenu && c != null && (pMenu == null || (pMenu != null && !pMenu.active))) {c.render(true, c.x, c.y);}
     }
