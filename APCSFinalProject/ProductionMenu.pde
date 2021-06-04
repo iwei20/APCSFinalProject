@@ -1,6 +1,6 @@
 class ProdOption {
   int type;
-  Sprite unit, unit_grey;
+  Sprite unit;
   int cost;
   String name;
 }
@@ -36,11 +36,6 @@ class ProductionMenu {
       int spriteIndex = int(dat[0]);
       next.type = spriteIndex;
       next.unit = new Sprite(loadImage("units/t" + m.whoseTurn + "_" + spriteIndex + ".png"));
-      if (spriteIndex < 4 || spriteIndex >= 16) {
-        next.unit_grey = new Sprite(loadImage("units/t" + m.whoseTurn + "_" + (spriteIndex+4) + ".png"));
-      } else {
-        next.unit_grey = null;  
-      }
       
       next.cost = int(dat[1]);
       next.name = "";
@@ -80,11 +75,16 @@ class ProductionMenu {
        text("$" + m.money[m.whoseTurn], LEFT_X + 10, TOP_Y - 15);
        // Calculate later
        for(int i = 0; i < options.size(); ++i) {
-         if(40 * i <= HEIGHT && m.money[m.whoseTurn] >= options.get(i).cost) {
-           options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 40 * i, 2);
+         if(40 * i <= HEIGHT) {
+           if(m.money[m.whoseTurn] >= options.get(i).cost) {
+             options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 40 * i, 2);
+             fill(0, 0, 0);
+           } else {
+             options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 40 * i, 2, false, 0.8, false);
+             fill(128, 128, 128);
+           }
            textAlign(LEFT);
            textSize(24);
-           fill(0, 0, 0);
            text(options.get(i).name, LEFT_X + 50, TOP_Y + 25 + 40 * i);
            textAlign(RIGHT);
            text(options.get(i).cost, LEFT_X + WIDTH - 10, TOP_Y + 25 + 40 * i);
