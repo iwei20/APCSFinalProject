@@ -72,6 +72,7 @@ class ProductionMenu {
    void render() {
      if(active) {
        strokeWeight(2);
+       stroke(0);
        fill(0, 0, 0);
        rect(LEFT_X + 5, TOP_Y + 5, WIDTH, HEIGHT);
        switch (m.whoseTurn) {
