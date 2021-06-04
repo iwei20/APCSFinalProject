@@ -10,7 +10,7 @@ class ProductionMenu {
   int LEFT_X, TOP_Y, WIDTH, HEIGHT;
   boolean active;
   int target_x, target_y;
-  int curr_mc_index;
+  int curr_mc_index, top_index;
   ArrayList<ProdOption> options;
   MenuCursor mc;
    
@@ -100,9 +100,10 @@ class ProductionMenu {
              fill(128, 128, 128);
            }
            textAlign(LEFT);
-           textSize(24);
+           textSize(28);
            text(options.get(i).name, LEFT_X + 50, TOP_Y + 33 + 40 * i);
            textAlign(RIGHT);
+           textSize(24);
            text(options.get(i).cost, LEFT_X + WIDTH - 10, TOP_Y + 33 + 40 * i);
          }
          if(i == curr_mc_index) {
