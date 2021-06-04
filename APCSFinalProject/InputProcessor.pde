@@ -70,6 +70,10 @@ void parseInput() {
         inCombatMenu = false;
       }
     }
+  } else if(m.pMenu != null && m.pMenu.active) {
+    if (keyCode == 'U') {
+      m.pMenu.active = false;
+    }
   } else if (!unitExploding){
     if (showRange != null) {keyCode = 'U';}
     
@@ -116,8 +120,12 @@ void parseInput() {
     if (keyCode == 'I')  {
       if (m.getCursor().selected == null) {
         if (m.getTile(m.getCursor().x,m.getCursor().y).occupying == null) {
-          inCombatMenu = true;
-          m.combatMenu = new MenuOption(new String[]{"Unit","Save","Options","End"},"GUI/MainMenu.png");
+          if(m.getTile(m.getCursor().x, m.getCursor().y).base != null && m.getTile(m.getCursor().x, m.getCursor().y).base.canProduce) {
+            m.getTile(m.getCursor().x, m.getCursor().y).base.openProduction(m.getCursor().x, m.getCursor().y);
+          } else {
+            inCombatMenu = true;
+            m.combatMenu = new MenuOption(new String[]{"Unit","Save","Options","End"},"GUI/MainMenu.png");
+          }
         } else if (!m.getTile(m.getCursor().x,m.getCursor().y).occupying.takenAction && 
                     m.getTile(m.getCursor().x,m.getCursor().y).occupying.exploding == -1 /*&& 
                     m.getTile(m.getCursor().x,m.getCursor().y).occupying.team == m.whoseTurn*/) {
