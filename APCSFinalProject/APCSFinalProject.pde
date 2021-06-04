@@ -40,8 +40,6 @@ void setup() {
   // load map 
   try {
     byte[] mapData = loadBytes("maps/Volcano_Island.dat");
-    mapData[mapData.length - 30] = 14;
-    mapData[mapData.length - 38] = 15;
     m = new Map(mapData);
   } catch(Exception e) {
     e.printStackTrace();
