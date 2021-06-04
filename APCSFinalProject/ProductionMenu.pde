@@ -14,7 +14,7 @@ class ProductionMenu {
   MenuCursor mc;
    
   public ProductionMenu(String path) throws IOException {
-    LEFT_X = 40;
+    LEFT_X = 30;
     TOP_Y = 50;
     WIDTH = 300;
     HEIGHT = height - TOP_Y - 10;
@@ -35,9 +35,7 @@ class ProductionMenu {
       // Read in sprite and load it
       int spriteIndex = int(dat[0]);
       next.type = spriteIndex;
-      println(spriteIndex);
       next.unit = new Sprite(loadImage("units/t" + m.whoseTurn + "_" + spriteIndex + ".png"));
-      println("HI");
       if (spriteIndex < 4 || spriteIndex >= 16) {
         next.unit_grey = new Sprite(loadImage("units/t" + m.whoseTurn + "_" + (spriteIndex+4) + ".png"));
       } else {
@@ -64,13 +62,22 @@ class ProductionMenu {
    }
    
    void createUnit() {
-     m.board[target_y][target_x].occupying = new Unit(m, target_x, target_y, options.get(curr_mc_index).type, m.whoseTurn);  
+     m.board[target_y][target_x].occupying = new Unit(m, target_x, target_y, options.get(curr_mc_index).type, m.whoseTurn);
+     m.board[target_y][target_x].occupying.setActionTaken();
+     if(m.whoseTurn == 0) m.pUnits.add(m.board[target_y][target_x].occupying);
+     if(m.whoseTurn == 2) m.eUnits.add(m.board[target_y][target_x].occupying);
+     m.money[m.whoseTurn] -= options.get(curr_mc_index).cost;
    }
    
    void render() {
      if(active) {
        fill(255, 255, 255, 180);
        rect(LEFT_X, TOP_Y, WIDTH, HEIGHT);
+       rect(LEFT_X, TOP_Y - 40, WIDTH / 2, 30);
+       textAlign(LEFT);
+       textSize(24);
+       fill(0, 0, 0);
+       text("$" + m.money[m.whoseTurn], LEFT_X + 10, TOP_Y - 15);
        // Calculate later
        for(int i = 0; i < options.size(); ++i) {
          if(40 * i <= HEIGHT && m.money[m.whoseTurn] >= options.get(i).cost) {
@@ -86,6 +93,7 @@ class ProductionMenu {
            mc.render(LEFT_X - 20, TOP_Y + 10 + 40 * i);
          }
        }
+       
      }
      
    }
