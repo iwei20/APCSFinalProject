@@ -16,7 +16,7 @@ class ProductionMenu {
    
   public ProductionMenu(String path) throws IOException {
     LEFT_X = 30;
-    TOP_Y = 50;
+    TOP_Y = 90;
     WIDTH = 300;
     HEIGHT = height - TOP_Y - 10;
     active = false;
@@ -67,7 +67,18 @@ class ProductionMenu {
    
    void render() {
      if(active) {
-       fill(255, 255, 255, 180);
+       strokeWeight(2);
+       switch (m.whoseTurn) {
+         case 0:
+           fill(247, 189, 165, 225);
+           break;
+         case 2:
+           fill(165, 206, 247, 225);
+           break;
+         default:
+           fill(128, 128, 128, 255);
+           break;
+       }
        rect(LEFT_X, TOP_Y, WIDTH, HEIGHT);
        rect(LEFT_X, TOP_Y - 40, WIDTH / 2, 30);
        textAlign(LEFT);
@@ -78,20 +89,20 @@ class ProductionMenu {
        for(int i = 0; i < options.size(); ++i) {
          if(40 * i <= HEIGHT) {
            if(m.money[m.whoseTurn] >= options.get(i).cost) {
-             options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 40 * i, 2);
+             options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 10 + 40 * i, 2);
              fill(0, 0, 0);
            } else {
-             options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 40 * i, 2, false, 0.8, false);
+             options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 10 + 40 * i, 2, false, 0.8, false);
              fill(128, 128, 128);
            }
            textAlign(LEFT);
            textSize(24);
-           text(options.get(i).name, LEFT_X + 50, TOP_Y + 25 + 40 * i);
+           text(options.get(i).name, LEFT_X + 50, TOP_Y + 33 + 40 * i);
            textAlign(RIGHT);
-           text(options.get(i).cost, LEFT_X + WIDTH - 10, TOP_Y + 25 + 40 * i);
+           text(options.get(i).cost, LEFT_X + WIDTH - 10, TOP_Y + 33 + 40 * i);
          }
          if(i == curr_mc_index) {
-           mc.render(LEFT_X - 20, TOP_Y + 10 + 40 * i);
+           mc.render(LEFT_X - 20, TOP_Y + 15 + 40 * i);
          }
        }
        
