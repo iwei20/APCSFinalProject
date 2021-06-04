@@ -38,7 +38,13 @@ void setup() {
   }
   aw2font = createFont("advance-wars-2-gba.ttf", 20, false);
   // load map 
-  m = new Map(loadBytes("maps/Jewel_Canal.dat"));
+  try {
+    byte[] mapData = loadBytes("maps/Volcano_Island.dat");
+    mapData[mapData.length - 30] = 14;
+    m = new Map(mapData);
+  } catch(Exception e) {
+    e.printStackTrace();
+  }
   m.newTurn();
   // load Damage Chart 
   damageChart = new int[28][28];

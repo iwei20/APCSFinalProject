@@ -3,6 +3,7 @@ public class Captureable {
   int team; 
   boolean critical;
   boolean canProduce;
+  boolean hasProduced;
   Unit capturing;
   Sprite s;
   
@@ -24,17 +25,25 @@ public class Captureable {
         break;
     }
     s = new Sprite("tiles/" + c + (ishq ? "HQ.png" : (canProduce ? "Base.png" : "City.png")));
+    this.canProduce = canProduce;
+    hasProduced = false;
   }
   public void shallowCopy(Captureable a, Captureable b) {
     b.hp = a.hp;
     b.team = a.team;
     b.capturing = a.capturing;
     b.s = a.s;
+    b.canProduce = a.canProduce;
   }
   
   void openProduction(int x, int y) {
     // Open production menu
-    if(canProduce) {
+    if(canProduce && !hasProduced) {
+      try {
+        m.pMenu = new ProductionMenu("ProductionChart.dat");
+      } catch(Exception e) {
+        e.printStackTrace();
+      }
       m.pMenu.setTarget(x, y);
       m.pMenu.active = true;
     }

@@ -29,7 +29,7 @@ public class Map {
   after which is enemy unit data until the second FF byte, same format
   afterwards is map data according to the size given;
   */
-  public Map(byte[] data) {
+  public Map(byte[] data) throws IOException {
     c = new Cursor(false);
     whoseTurn = playerTeams[0];
     turns = 0;
@@ -37,7 +37,6 @@ public class Map {
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     board = new Tile[data[0]][data[1]];
-    pMenu = new ProductionMenu();
     money = new int[3];
     money[0] = money[2] = 10000;
     
@@ -121,7 +120,7 @@ public class Map {
       if (pUnits.size() == 0) {win(1);}
       if (eUnits.size() == 0) {win(0);}
       
-      if (!inCombatMenu && c != null && !pMenu.active) {c.render(true, c.x, c.y);}
+      if (!inCombatMenu && c != null && (pMenu == null || (pMenu != null && !pMenu.active))) {c.render(true, c.x, c.y);}
     }
     
     if (framesSinceNewTurn >= 0) {
