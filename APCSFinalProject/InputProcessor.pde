@@ -72,8 +72,7 @@ void parseInput() {
     }
   } else if(m.pMenu != null && m.pMenu.active) {
     if (keyCode == 'I') {
-      m.pMenu.createUnit();
-      m.getTile(m.pMenu.target_x, m.pMenu.target_y).base.hasProduced = true;
+      m.getTile(m.pMenu.target_x, m.pMenu.target_y).base.hasProduced = m.pMenu.createUnit();
       m.pMenu.active = false;
     }
     if (keyCode == 'U') {
