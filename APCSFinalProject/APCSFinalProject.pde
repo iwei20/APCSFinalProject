@@ -56,6 +56,7 @@ void draw() {
   m.render();
   if (showRange != null) {
     showRange.displayRange(true,true);
+    m.c.render(false,m.c.x,m.c.y);
   }
 }
 
