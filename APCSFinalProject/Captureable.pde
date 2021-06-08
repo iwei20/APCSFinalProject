@@ -12,18 +12,7 @@ public class Captureable {
     team = t;
     capturing = null;
     critical = ishq;
-    String c = "";
-    switch(t) {
-      case -1:
-        c = "Neutral";
-        break;
-      case 0:
-        c = "Red";
-        break;
-      case 2:
-        c = "Blue";
-        break;
-    }
+    String c = t == -1 ? "Neutral" : getTeamColor(t);
     s = new Sprite("tiles/" + c + (ishq ? "HQ.png" : (canProduce ? "Base.png" : "City.png")));
     this.canProduce = canProduce;
     hasProduced = false;
@@ -65,7 +54,9 @@ public class Captureable {
     }
     return team;  
   }
-  
+  public String getTeamColor(int team) {
+    return team < 2 ? (team == 0 ? "Red" : "Green") : (team == 2 ? "Blue" : "Yellow");
+  }
   public void render(int pos_x, int pos_y) {
     s.draw(pos_x*scale*16,(pos_y-1)*scale*16,scale);
   }
