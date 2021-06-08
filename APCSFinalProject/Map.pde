@@ -143,7 +143,7 @@ public class Map {
         if(getCursorX() <= width / 64) {
           turn_x = width - teamIcons[whoseTurn].dat.width * scale - width / 32;
         }
-        teamIcons[whoseTurn].draw(turn_x, height/32,scale);
+        (false ? teamMoneyIcons[whoseTurn] : teamIcons[whoseTurn]).draw(turn_x, height/32,scale);
           
         int xd = turn_x+scale*51;
         for (char c : ((turns/2+1) + "").toCharArray()) {
