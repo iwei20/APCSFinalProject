@@ -69,7 +69,7 @@ void setup() {
 
 void draw() {
   background(color(239,222,173));
-  m.render();
+  if (!gameOver ||gameOverTime < 75) {m.render();}
   if (gameOver == true) {showRange = null;}
   if (showRange != null) {
     showRange.displayRange(true,true);
