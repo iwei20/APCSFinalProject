@@ -34,14 +34,14 @@ public class Terrain {
         drivable = true;
         ocean = false;
         defense = 0;
-        s = new Sprite("tiles/Road_Horizontal.png");
+        s = new Sprite("tiles/road_1.png");
         movementCosts = new int[]{1,1,1,-1};
         break;
       case 3: // vertical road
         drivable = true;
         ocean = false;
         defense = 0;
-        s = new Sprite("tiles/Road_Vertical.png");
+        s = new Sprite("tiles/road_0.png");
         movementCosts = new int[]{1,1,1,-1};
         break;
       case 4: // plains
