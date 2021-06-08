@@ -17,7 +17,7 @@ Unit showRange = null;
 boolean inCombatMenu = false;
 int[] mvmtRanges = new int[]{6,8,2,3,-1,-1,-1,-1,-1,6,4,5,4,4,4,-1,6,6,7,9,-1,-1,-1,-1,5,4,6,5};
 /* damageChart[defender][attacker] */
-int[] playerTeams = new int[]{0,2};
+int[] playerTeams = new int[]{1,2};
 int[][] damageChart;
 
 void setup() {
@@ -31,17 +31,22 @@ void setup() {
   for (int i = 0; i < numberSprites.length; i++) {
     numberSprites[i] = new Sprite("icons/number_" + i + ".png");
   }
-  captureIcons = new Sprite[5];
-  captureIcons[0] = new Sprite("icons/t0_Capture.png");
-  captureIcons[2] = new Sprite("icons/t2_Capture.png");
+  captureIcons = new Sprite[4];
+  for (int i = 0; i < captureIcons.length; i++) {
+    captureIcons[i] = new Sprite("icons/t" + i + "_Capture.png");
+  }
   teamIcons = new Sprite[4];
   for (int i = 0; i < teamIcons.length; i++) {
     teamIcons[i] = new Sprite("teams/t" + i + "_newturn.png");
   }
   teamMoneyIcons = new Sprite[4];
-  winScreens = new Sprite[5];
-  winScreens[0] = new Sprite("teams/t0_Win.png");
-  winScreens[2] = new Sprite("teams/t2_Win.png");
+  for (int i = 0; i < teamMoneyIcons.length; i++) {
+    teamMoneyIcons[i] = new Sprite("teams/t" + i + "_Money.png");
+  }
+  winScreens = new Sprite[4];
+  for (int i = 0; i < winScreens.length; i++) {
+    winScreens[i] = new Sprite("teams/t" + i+ "_Win.png");  
+  }
   victorySprite = new Sprite("teams/Victory.png");
   explosionFrames = new Sprite[9];
   for (int i = 0; i < explosionFrames.length; i++) {
