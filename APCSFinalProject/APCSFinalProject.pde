@@ -2,6 +2,8 @@ Map m;
 Sprite[] healthIcons;
 Sprite[] captureIcons;
 Sprite[] teamIcons;
+Sprite[] winScreens;
+Sprite victorySprite;
 Sprite[] explosionFrames; 
 Sprite[] numberSprites;
 PFont aw2font;
@@ -32,6 +34,10 @@ void setup() {
   for (int i = 0; i < teamIcons.length; i++) {
     teamIcons[i] = new Sprite("teams/t" + i + "_newturn.png");
   }
+  winScreens = new Sprite[5];
+  winScreens[0] = new Sprite("teams/t0_Win.png");
+  winScreens[2] = new Sprite("teams/t2_Win.png");
+  victorySprite = new Sprite("teams/Victory.png");
   explosionFrames = new Sprite[9];
   for (int i = 0; i < explosionFrames.length; i++) {
     explosionFrames[i] = new Sprite("ExplosionFrame" + i + ".png");
@@ -57,7 +63,7 @@ void setup() {
 }
 
 void draw() {
-  background(128);
+  background(color(239,222,173));
   m.render();
   if (showRange != null) {
     showRange.displayRange(true,true);
@@ -66,6 +72,7 @@ void draw() {
 }
 
 void keyPressed() {
+  //if (keyCode == 'C') {m.win(1);}
   parseInput();
 }
 void keyReleased() {

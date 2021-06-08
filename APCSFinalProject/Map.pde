@@ -7,6 +7,8 @@ public class Map {
   int whoseTurn;
   int framesSinceNewTurn;
   boolean gameOver;
+  int gameOverTime;
+  int winningPlayer;
   Tile[][] board;
   int[] money;
   private ArrayList<Unit> pUnits, eUnits;
@@ -117,58 +119,60 @@ public class Map {
     boolean[] checkUnits = new boolean[5];
     for (int i = 0; i < checkUnits.length; i++) {checkUnits[i] = false;}
     
-    //background
-    for (int layer = 0; layer <= 1; layer++) {
-      for (int j = 0; j < board.length; j++) {
-        for (int i = 0; i < board[0].length; i++) {
-          board[j][i].render(i + left_view,j + top_view,layer);
-          if (board[j][i].base != null && board[j][i].base.canProduce) {
-            checkUnits[board[j][i].base.team] = true;  
-          }
-        }  
+    if (!gameOver || gameOverTime < 75) { 
+      //background
+      for (int layer = 0; layer <= 1; layer++) {
+        for (int j = 0; j < board.length; j++) {
+          for (int i = 0; i < board[0].length; i++) {
+            board[j][i].render(i + left_view,j + top_view,layer);
+            if (board[j][i].base != null && board[j][i].base.canProduce) {
+              checkUnits[board[j][i].base.team] = true;  
+            }
+          }  
+        }
+      }
+      //"sprites"
+      if (!gameOver) {
+        if (!unitExploding) {
+          if (checkUnits[playerTeams[0]] == false && pUnits.size() == 0) {win(1);}
+          if (checkUnits[playerTeams[1]] == false && eUnits.size() == 0) {win(0);}
+          
+          if (!gameOver && !inCombatMenu && c != null && (pMenu == null || (pMenu != null && !pMenu.active))) {c.render(true, c.x, c.y);}
+        }
+        int turn_x = width/32; 
+        if(getCursorX() <= width / 64) {
+          turn_x = width - teamIcons[whoseTurn].dat.width * scale - width / 32;
+        }
+        teamIcons[whoseTurn].draw(turn_x, height/32,scale);
+          
+        int xd = turn_x+scale*51;
+        for (char c : ((turns/2+1) + "").toCharArray()) {
+          numberSprites[c-0x30].draw(xd,height/32+7*scale,scale);
+          xd += 7*scale;
+        }
+        // menu
+        if (inCombatMenu && combatMenu != null) {combatMenu.render();}
+        if(pMenu != null && pMenu.active) pMenu.render();
       }
     }
-    //"sprites"
-    if (!unitExploding && !gameOver) {
-      if (checkUnits[playerTeams[0]] == false && pUnits.size() == 0) {win(1);}
-      if (checkUnits[playerTeams[1]] == false && eUnits.size() == 0) {win(0);}
-      
-      if (!inCombatMenu && c != null && (pMenu == null || (pMenu != null && !pMenu.active))) {c.render(true, c.x, c.y);}
-    }
-    
-    int turn_x = width/32; 
-    if(getCursorX() <= width / 64) {
-      turn_x = width - teamIcons[whoseTurn].dat.width * scale - width / 32;
-    }
-    teamIcons[whoseTurn].draw(turn_x, height/32,scale);
-      
-    int xd = turn_x+scale*51;
-    for (char c : ((turns/2+1) + "").toCharArray()) {
-      numberSprites[c-0x30].draw(xd,height/32+7*scale,scale);
-      xd += 7*scale;
-    }
-    /*
-    if (framesSinceNewTurn >= 0) {
-      framesSinceNewTurn++;
-      if (framesSinceNewTurn >= 90) {framesSinceNewTurn = -1;}
-      teamIcons[whoseTurn].draw(width/32,height/32,scale);
-      
-      int xd = width/32+scale*51;
-      for (char c : ((turns/2+1) + "").toCharArray()) {
-        numberSprites[c-0x30].draw(xd,height/32+7*scale,scale);
-        xd += 7*scale;
+    if (gameOver) {
+      if (gameOverTime < 75) {
+        noStroke();
+        fill(color(255,255,255,gameOverTime*4.25));
+        rect(0,0,width,height);
+        victorySprite.draw(0,height/2-victorySprite.dat.height/2,scale);
+        gameOverTime++;
+      } else {
+        winScreens[winningPlayer].draw(0,0,scale); 
       }
-    }*/
-    
-    // menu
-    if (inCombatMenu && combatMenu != null) {combatMenu.render();}
-    if(pMenu != null && pMenu.active) pMenu.render();
-    
+    }
   }
   
   public void win(int player) {
     if (gameOver) {return;}
     gameOver = true;
+    winningPlayer = playerTeams[player];
+    gameOverTime = 0;
     println("Player " + (player+1) + " wins!");
   }
 }
