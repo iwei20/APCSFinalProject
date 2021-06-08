@@ -31,3 +31,5 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 - Cameron - created Base/Factory graphics, fixed bug to only allow base selection if it is on that side.
 ### 6/4/2021
 - Ivan - Turn indicator is now permanent and switches sides based on cursor position, also recolored production menu
+### 6/8/2021
+- Ivan - Spent extra time adding road/coast variations to prepare for sprite variations
