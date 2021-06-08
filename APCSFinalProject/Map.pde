@@ -36,8 +36,8 @@ public class Map {
     pUnits = new ArrayList();
     eUnits = new ArrayList();
     board = new Tile[data[0]][data[1]];
-    money = new int[3];
-    money[0] = money[2] = 10000;
+    money = new int[4];
+    for (int i = 0; i < money.length; i++) {money[i] = 8000;}
     
     top_view = 0;left_view = 0;
     int l;
@@ -53,11 +53,11 @@ public class Map {
     }
     // Do map data first so that for Unit constructor board doesnt have any null values
     for (l = 2; data[l] != -128; l += 3) {
-      pUnits.add(new Unit(this,data[l],data[l+1],data[l+2],0));
+      pUnits.add(new Unit(this,data[l],data[l+1],data[l+2],playerTeams[0]));
     }
     l++;
     for (; data[l] != -128; l += 3) {
-      eUnits.add(new Unit(this,data[l],data[l+1],data[l+2],2));
+      eUnits.add(new Unit(this,data[l],data[l+1],data[l+2],playerTeams[1]));
     }
     l++;
   }
@@ -73,6 +73,9 @@ public class Map {
       for (int j = 0; j < board[0].length; ++j) {
         if(getTile(j, i).base != null) {
           getTile(j, i).base.hasProduced = false;
+          if (getTile(j,i).base.team == whoseTurn && turns != 0) {
+            money[whoseTurn] = min(99000,money[whoseTurn]+1000);
+          }
         }
       }
     }
@@ -114,6 +117,7 @@ public class Map {
   
   public void render() {
     boolean[] checkUnits = new boolean[5];
+    boolean checkBase = false;
     for (int i = 0; i < checkUnits.length; i++) {checkUnits[i] = false;}
     
     if (!gameOver || gameOverTime < 75) { 
@@ -124,6 +128,7 @@ public class Map {
             board[j][i].render(i + left_view,j + top_view,layer);
             if (board[j][i].base != null && board[j][i].base.canProduce) {
               checkUnits[board[j][i].base.team] = true;  
+              checkBase = true;
             }
           }  
         }
@@ -136,15 +141,15 @@ public class Map {
           
           if (!gameOver && !inCombatMenu && c != null && (pMenu == null || (pMenu != null && !pMenu.active))) {c.render(true, c.x, c.y);}
         }
-        int turn_x = width/32; 
+        int turn_x = width/64; 
         if(getCursorX() <= width / 64) {
-          turn_x = width - teamIcons[whoseTurn].dat.width * scale - width / 32;
+          turn_x = width - teamIcons[whoseTurn].dat.width * scale - width / 64;
         }
-        (false ? teamMoneyIcons[whoseTurn] : teamIcons[whoseTurn]).draw(turn_x, height/32,scale);
+        (checkBase ? teamMoneyIcons[whoseTurn] : teamIcons[whoseTurn]).draw(turn_x, height/64,scale);
           
-        int xd = turn_x+scale*51;
-        for (char c : ((turns/2+1) + "").toCharArray()) {
-          numberSprites[c-0x30].draw(xd,height/32+7*scale,scale);
+        int xd = turn_x+scale*(checkBase ? 30 : 51);
+        for (char c : ((checkBase ? money[whoseTurn] : (turns/2+1)) + "").toCharArray()) {
+          numberSprites[c-0x30].draw(xd,height/64+7*scale,scale);
           xd += 7*scale;
         }
         // menu
