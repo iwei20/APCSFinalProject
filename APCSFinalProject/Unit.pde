@@ -230,9 +230,9 @@ public class Unit {
     if (exploding == -1) {
       if (health > 0) {
         if (true) {
-          s.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
+          s.draw(scale*x*16,scale*y*16,scale,team != playerTeams[0],takenAction ? .8 : 1);
         } else {
-          s_alt.draw(scale*x*16,scale*y*16,scale,team != 0,takenAction ? .8 : 1);
+          s_alt.draw(scale*x*16,scale*y*16,scale,team != playerTeams[0],takenAction ? .8 : 1);
         }
         if (ceil(health) < 10) {
           healthIcons[ceil(health)-1].draw(scale*x*16+8*scale,scale*y*16+9*scale,scale,false,true);
