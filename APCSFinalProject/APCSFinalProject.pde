@@ -2,6 +2,7 @@ Map m;
 Sprite[] healthIcons;
 Sprite[] captureIcons;
 Sprite[] teamIcons;
+Sprite[] teamMoneyIcons;
 Sprite[] winScreens;
 Sprite victorySprite;
 Sprite[] explosionFrames; 
@@ -34,6 +35,7 @@ void setup() {
   for (int i = 0; i < teamIcons.length; i++) {
     teamIcons[i] = new Sprite("teams/t" + i + "_newturn.png");
   }
+  teamMoneyIcons = new Sprite[4];
   winScreens = new Sprite[5];
   winScreens[0] = new Sprite("teams/t0_Win.png");
   winScreens[2] = new Sprite("teams/t2_Win.png");
