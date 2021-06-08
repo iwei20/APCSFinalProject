@@ -6,9 +6,6 @@ public class Map {
   int turns;
   int whoseTurn;
   int framesSinceNewTurn;
-  boolean gameOver;
-  int gameOverTime;
-  int winningPlayer;
   Tile[][] board;
   int[] money;
   private ArrayList<Unit> pUnits, eUnits;
@@ -153,17 +150,6 @@ public class Map {
         // menu
         if (inCombatMenu && combatMenu != null) {combatMenu.render();}
         if(pMenu != null && pMenu.active) pMenu.render();
-      }
-    }
-    if (gameOver) {
-      if (gameOverTime < 75) {
-        noStroke();
-        fill(color(255,255,255,gameOverTime*4.25));
-        rect(0,0,width,height);
-        victorySprite.draw(0,height/2-victorySprite.dat.height/2,scale);
-        gameOverTime++;
-      } else {
-        winScreens[winningPlayer].draw(0,0,scale); 
       }
     }
   }

@@ -7,6 +7,9 @@ Sprite[] winScreens;
 Sprite victorySprite;
 Sprite[] explosionFrames; 
 Sprite[] numberSprites;
+boolean gameOver;
+int gameOverTime;
+int winningPlayer;
 PFont aw2font;
 boolean unitExploding;
 final int scale = 2;
@@ -67,14 +70,26 @@ void setup() {
 void draw() {
   background(color(239,222,173));
   m.render();
+  if (gameOver == true) {showRange = null;}
   if (showRange != null) {
     showRange.displayRange(true,true);
     m.c.render(false,m.c.x,m.c.y);
   }
+  if (gameOver) {
+      if (gameOverTime < 75) {
+        noStroke();
+        fill(color(255,255,255,gameOverTime*4.25));
+        rect(0,0,width,height);
+        victorySprite.draw(0,height/2-victorySprite.dat.height/2,scale);
+        gameOverTime++;
+      } else {
+        winScreens[winningPlayer].draw(0,0,scale); 
+      }
+    }
 }
 
 void keyPressed() {
-  //if (keyCode == 'C') {m.win(1);}
+  if (keyCode == 'C') {m.win(1);}
   parseInput();
 }
 void keyReleased() {

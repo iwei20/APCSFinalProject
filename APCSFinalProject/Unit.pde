@@ -202,7 +202,7 @@ public class Unit {
       return true;
     }
     Terrain t = m.board[ty][tx].getTerrain();
-    if (isVehicle && !airborne && m.board[ty][tx].occupying != null && !m.board[ty][tx].occupying.airborne) {return false;}
+    if (!airborne && m.board[ty][tx].occupying != null && !m.board[ty][tx].occupying.airborne) {return false;}
     if (checkAtAll) {
       if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>//
       steps += (airborne ?  1 : max(t.movementCosts[mvmtType] - (t.movementCosts[mvmtType] + steps > maxSteps? 1 : 0),1)); //<>//
