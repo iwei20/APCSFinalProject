@@ -17,7 +17,7 @@ Unit showRange = null;
 boolean inCombatMenu = false;
 int[] mvmtRanges = new int[]{6,8,2,3,-1,-1,-1,-1,-1,6,4,5,4,4,4,-1,6,6,7,9,-1,-1,-1,-1,5,4,6,5};
 /* damageChart[defender][attacker] */
-int[] playerTeams = new int[]{1,2};
+int[] playerTeams = new int[]{1,3};
 int[][] damageChart;
 
 void setup() {
