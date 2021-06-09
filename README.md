@@ -33,4 +33,5 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 - Ivan - Turn indicator is now permanent and switches sides based on cursor position, also recolored production menu
 ### 6/8/2021
 - Ivan - Spent extra time adding road/coast variations to prepare for sprite variations
-- Cameron - Created proper victory screen
+- Cameron - Created proper victory screen, added icons for all teams, Made player icon show player money if they control a base
+
