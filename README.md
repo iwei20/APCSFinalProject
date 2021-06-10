@@ -34,4 +34,5 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 ### 6/8/2021
 - Ivan - Spent extra time adding road/coast variations to prepare for sprite variations
 - Cameron - Created proper victory screen, added icons for all teams, Made player icon show player money if they control a base
-
+### 6/10/2021
+- Ivan - Quickly implement sub-sprite variations and tested it with a water edge tile
