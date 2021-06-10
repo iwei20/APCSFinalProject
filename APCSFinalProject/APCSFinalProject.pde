@@ -1,3 +1,10 @@
+import java.io.*;
+
+File[] mapList;
+Sprite selectMapSprite;
+Sprite selectionBackground;
+int mapListingScroll;
+int mapSelected;
 Map m;
 Sprite[] healthIcons;
 Sprite[] captureIcons;
@@ -17,10 +24,14 @@ Unit showRange = null;
 boolean inCombatMenu = false;
 int[] mvmtRanges = new int[]{6,8,2,3,-1,-1,-1,-1,-1,6,4,5,4,4,4,-1,6,6,7,9,-1,-1,-1,-1,5,4,6,5};
 /* damageChart[defender][attacker] */
-int[] playerTeams = new int[]{1,3};
+int[] playerTeams = new int[]{0,2};
 int[][] damageChart;
 
 void setup() {
+  selectMapSprite = new Sprite("GUI/selectmap.png");
+  selectionBackground = new Sprite("GUI/selectionBackground.png");
+  File directory = new File(this.dataPath("maps/"));
+  mapList = directory.listFiles();
   //frameRate(5);
   size(480,320);
   healthIcons = new Sprite[9];
@@ -53,14 +64,6 @@ void setup() {
     explosionFrames[i] = new Sprite("ExplosionFrame" + i + ".png");
   }
   aw2font = createFont("advance-wars-2-gba.ttf", 20, false);
-  // load map 
-  try {
-    byte[] mapData = loadBytes("maps/Volcano_Island.dat");
-    m = new Map(mapData);
-  } catch(Exception e) {
-    e.printStackTrace();
-  }
-  m.newTurn();
   // load Damage Chart 
   damageChart = new int[28][28];
   byte[] temp = loadBytes("damageChart.dat");
@@ -74,23 +77,52 @@ void setup() {
 
 void draw() {
   background(color(239,222,173));
-  if (!gameOver ||gameOverTime < 75) {m.render();}
-  if (gameOver == true) {showRange = null;}
-  if (showRange != null) {
-    showRange.displayRange(true,true);
-    m.c.render(false,m.c.x,m.c.y);
-  }
-  if (gameOver) {
-      if (gameOverTime < 75) {
-        noStroke();
-        fill(color(255,255,255,gameOverTime*4.25));
-        rect(0,0,width,height);
-        victorySprite.draw(0,height/2-victorySprite.dat.height/2,scale);
-        gameOverTime++;
-      } else {
-        winScreens[winningPlayer].draw(0,0,scale); 
-      }
+  if (m != null) {
+    if (!gameOver ||gameOverTime < 75) {m.render();}
+    if (gameOver == true) {showRange = null;}
+    if (showRange != null) {
+      showRange.displayRange(true,true);
+      m.c.render(false,m.c.x,m.c.y);
     }
+    if (gameOver) {
+        if (gameOverTime < 75) {
+          noStroke();
+          fill(color(255,255,255,gameOverTime*4.25));
+          rect(0,0,width,height);
+          victorySprite.draw(0,height/2-victorySprite.dat.height/2,scale);
+          gameOverTime++;
+        } else {
+          winScreens[winningPlayer].draw(0,0,scale); 
+        }
+      }
+  } else {
+    textAlign(LEFT);
+    int y_pos = 0;
+    textSize(30);
+    fill(0);
+    selectMapSprite.draw(0,1*scale,scale);
+    selectionBackground.draw(0,height/3-24,scale);
+    for (int i = mapListingScroll; i < mapList.length; i++) {
+      String toStr = mapList[i].toString();
+      toStr = toStr.substring(1+toStr.lastIndexOf('\\'),toStr.lastIndexOf('.'));
+      toStr = toStr.replace("_"," ");
+      text(toStr,width/64,32*y_pos+height/3);
+      y_pos++;
+    }
+  }
+}
+
+Map loadMap(String path) {
+  // load map 
+  Map m = null;
+  try {
+    byte[] mapData = loadBytes("maps/Volcano_Island.dat");
+    m = new Map(mapData);
+  } catch(Exception e) {
+    e.printStackTrace();
+  }
+  if (m != null) {m.newTurn();}
+  return m;
 }
 
 void keyPressed() {
