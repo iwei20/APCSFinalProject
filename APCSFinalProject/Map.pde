@@ -47,10 +47,11 @@ public class Map {
     l++;
     for (int j = 0; j < board.length; j++) {
       for (int i = 0; i < board[j].length && l < data.length; i++) {
-        board[j][i] = new Tile(data[l]);
+        board[j][i] = new Tile(data[l], l + 1 + board.length * board[j].length < data.length ? data[l + 1 + board.length * board[j].length] : 0);
         l++;
       }  
     }
+    
     // Do map data first so that for Unit constructor board doesnt have any null values
     for (l = 2; data[l] != -128; l += 3) {
       pUnits.add(new Unit(this,data[l],data[l+1],data[l+2],playerTeams[0]));

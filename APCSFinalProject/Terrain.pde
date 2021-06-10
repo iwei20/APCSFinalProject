@@ -6,7 +6,7 @@ public class Terrain {
   int movementCosts[];
   Sprite s;
   
-  public Terrain(int index) {
+  public Terrain(int index, int subindex) {
     s = new Sprite(new PImage(16,16));
     switch(index) {
       case -1: // reef
@@ -20,7 +20,7 @@ public class Terrain {
         drivable = false;
         ocean = true;
         defense = 0;
-        s = new Sprite("tiles/Water.png");
+        s = new Sprite("tiles/water_" + subindex + ".png");
         movementCosts = new int[]{-1,-1,-1,1};
         break;
       case 1: // river
