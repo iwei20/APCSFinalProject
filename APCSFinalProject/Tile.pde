@@ -4,6 +4,7 @@ public class Tile {
   Captureable base;
   
   public Tile(int type, int subtype) {
+    if(type == 6) type = 8;
     t = new Terrain(type, subtype);
     occupying = null;
     base = null;
