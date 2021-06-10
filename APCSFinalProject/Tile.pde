@@ -3,8 +3,9 @@ public class Tile {
   Unit occupying;
   Captureable base;
   
-  public Tile(int type) {
-    t = new Terrain(type);
+  public Tile(int type, int subtype) {
+    if(type == 6) type = 8;
+    t = new Terrain(type, subtype);
     occupying = null;
     base = null;
     if (type >= 8 && type <= 12) {

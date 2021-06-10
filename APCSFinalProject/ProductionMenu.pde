@@ -61,8 +61,8 @@ class ProductionMenu {
      if(m.money[m.whoseTurn] >= options.get(curr_mc_index).cost) {
        m.board[target_y][target_x].occupying = new Unit(m, target_x, target_y, options.get(curr_mc_index).type, m.whoseTurn);
        m.board[target_y][target_x].occupying.setActionTaken();
-       if(m.whoseTurn == 0) m.pUnits.add(m.board[target_y][target_x].occupying);
-       if(m.whoseTurn == 2) m.eUnits.add(m.board[target_y][target_x].occupying);
+       if(m.whoseTurn == 0 || m.whoseTurn == 1) m.pUnits.add(m.board[target_y][target_x].occupying);
+       if(m.whoseTurn == 2 || m.whoseTurn == 3) m.eUnits.add(m.board[target_y][target_x].occupying);
        m.money[m.whoseTurn] -= options.get(curr_mc_index).cost;
        return true;
      }
@@ -79,11 +79,17 @@ class ProductionMenu {
          case 0:
            fill(247, 189, 165, 225);
            break;
+         case 1:
+           fill(165, 239, 173, 225);
+           break;
          case 2:
            fill(165, 206, 247, 225);
            break;
+         case 3:
+           fill(231, 231, 115, 225);
+           break;
          default:
-           fill(128, 128, 128, 255);
+           fill(50, 50, 50, 225);
            break;
        }
        rect(LEFT_X, TOP_Y, WIDTH, HEIGHT);
@@ -113,7 +119,7 @@ class ProductionMenu {
            mc.render(LEFT_X - 20, TOP_Y + 15 + 40 * i);
          }
        }
-       
+       strokeWeight(1);
      }
      
    }
