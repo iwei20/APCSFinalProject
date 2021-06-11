@@ -36,4 +36,4 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 - Cameron - Created proper victory screen, added icons for all teams, Made player icon show player money if they control a base
 ### 6/10/2021
 - Ivan - Quickly implement sub-sprite variations and tested it with a water edge tile
-- Created entire main selection menu and graphics
+- Cameron - Created entire main selection menu and graphics
