@@ -12,7 +12,8 @@ public class Unit {
   int mvmtType; // 0 = on foot, 1 = treads, 2 = tires
   int mvmtRange;
   int attackRangeMin, attackRangeMax;
-  int unitsCanTransport;
+  boolean canCarryUnits;
+  Unit carrying;
   boolean canAttack;
   boolean canAttackAndMove;
   boolean stationary;
@@ -41,7 +42,8 @@ public class Unit {
     this.isVehicle = index >= 9 && index <= 14;
     this.canAttack = !(index == 0 || index == 16);
     this.canAttackAndMove = !(index == 8 || (index >= 12 && index <= 14));
-    this.unitsCanTransport = (index == 0 || index == 16 || index == 24) ? (index == 24 ? 2 : 1) : 0;   
+    this.canCarryUnits = (index == 0 || index == 16 || index == 24); 
+    this.carrying = null;
     this.navalOnly = index >= 24; 
     
     int spriteIndex = type;
@@ -90,6 +92,29 @@ public class Unit {
   }
   public void setActionTaken() {
     takenAction = true;  
+  }
+  public boolean canLoadUnit(Unit other) {
+    return canCarryUnits && carrying == null && other.mvmtType == 0;  
+  }
+  public boolean loadUnit(Unit other) {
+    if (!canLoadUnit(other)) {return false;}
+    this.carrying = other;
+    m.getTile(other.x,other.y).occupying = null;
+    return true;
+  }
+  public boolean canDropUnit(int x, int y) {
+    return carrying != null && x >= 0 && x <= m.board[0].length && 
+    y >= 0 && y <= m.board.length && m.getTile(x,y).t.movementCosts[carrying.mvmtType] != -1 &&
+    m.getTile(x,y).occupying == null;
+  }
+  public boolean dropUnit(int x, int y) {
+    if (!canDropUnit(x,y)) {return false;}
+    m.getTile(x,y).occupying = this.carrying;
+    this.carrying.setActionTaken();
+    this.carrying.x = x;
+    this.carrying.y = y;
+    this.carrying = null;
+    return true;
   }
   public float calcPower(Unit a, Unit b) {
     if (abs(b.x-a.x) + abs(b.y-a.y) >= a.attackRangeMin && abs(b.x-a.x) + abs(b.y-a.y) <= a.attackRangeMax) {   
