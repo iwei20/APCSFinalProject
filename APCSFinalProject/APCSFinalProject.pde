@@ -5,8 +5,8 @@ Sprite selectMapSprite;
 Sprite selectionBackground;
 Sprite displayTileNums;
 Sprite behindMapSelected;
-int mapListingScroll;
-int mapSelected;
+int mapListingScroll = 0;
+int mapSelected = 0;
 int[] numTiles;
 Map m;
 Sprite[] healthIcons;
@@ -139,7 +139,7 @@ Map loadMap(String path) {
   // load map 
   Map m = null;
   try {
-    byte[] mapData = loadBytes("maps/Volcano_Island.dat");
+    byte[] mapData = loadBytes(path);
     m = new Map(mapData);
   } catch(Exception e) {
     e.printStackTrace();
@@ -174,6 +174,8 @@ void keyPressed() {
         mapSelected = min(mapSelected+1,mapList.length-1);  
       }
     } else if (keyCode == 'I') {
+      //println(mapSelected+mapListingScroll);
+      //println(mapList[mapSelected+mapListingScroll].toString());
       m = loadMap(mapList[mapSelected+mapListingScroll].toString());
     }
     if (keyCode == 'W' || keyCode == 'S') {
