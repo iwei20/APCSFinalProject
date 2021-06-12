@@ -1,14 +1,21 @@
 import java.io.*;
 
 File[] mapList;
+File selectedMap;
+Sprite TeamCursor;
 Sprite selectMapSprite;
+Sprite teamOverlay;
 Sprite selectionBackground;
 Sprite displayTileNums;
 Sprite behindMapSelected;
 int mapListingScroll = 0;
 int mapSelected = 0;
 int[] numTiles;
+int[] selectedTeams;
+int teamChanging;
 Map m;
+Sprite[] coIcons;
+Sprite[] teamSymbols;
 Sprite[] healthIcons;
 Sprite[] captureIcons;
 Sprite[] teamIcons;
@@ -36,8 +43,11 @@ void setup() {
   selectionBackground = new Sprite("GUI/selectionBackground.png");
   behindMapSelected = new Sprite("GUI/underMapSelected.png");
   displayTileNums = new Sprite("GUI/NumBasesCities.png");
+  teamOverlay = new Sprite("GUI/TeamsOverlay.png");
+  TeamCursor = new Sprite("TeamCursor.png");
   File directory = new File(this.dataPath("maps/"));
   mapList = directory.listFiles();
+  selectedMap = null;
   numTiles = getTileNums(loadBytes(mapList[0]));
   //frameRate(5);
   size(480,320);
@@ -54,6 +64,14 @@ void setup() {
   captureIcons = new Sprite[4];
   for (int i = 0; i < captureIcons.length; i++) {
     captureIcons[i] = new Sprite("icons/t" + i + "_Capture.png");
+  }
+  coIcons = new Sprite[4];
+  for (int i = 0; i < coIcons.length; i++) {
+    coIcons[i] = new Sprite("icons/t" + i + "_co.png");  
+  }
+  teamSymbols = new Sprite[4];
+  for (int i = 0; i < teamSymbols.length; i++) {
+    teamSymbols[i] = new Sprite("icons/t" + i + "_teamicon.png");  
   }
   teamIcons = new Sprite[4];
   for (int i = 0; i < teamIcons.length; i++) {
@@ -105,42 +123,49 @@ void draw() {
         }
       }
   } else {
-    textAlign(LEFT);
-    int y_pos = 0;
-    textSize(30);
-    fill(255);
-    selectMapSprite.draw(0,1*scale,scale);
-    selectionBackground.draw(0,height/3-32,scale);
-    displayTileNums.draw(width-displayTileNums.dat.width*scale,0,scale);
-    String tempString = "" + numTiles[0];
-    int temp = tempString.length() - 1;
-    for (int i = 0; i < tempString.length(); i++) {
-      whiteNumberSprites[tempString.charAt(i)-48].draw(width-displayTileNums.dat.width*scale-temp*16+scale*16,18*scale,scale);  
-      temp--;  
-    }
-    tempString = "" + numTiles[1];
-    temp = tempString.length() - 1;
-    for (int i = 0; i < tempString.length(); i++) {
-      whiteNumberSprites[tempString.charAt(i)-48].draw(width-displayTileNums.dat.width*scale-temp*16+scale*40,18*scale,scale);  
-      temp--;  
-    }
-    behindMapSelected.draw(0,77+mapSelected*32,scale);
-    for (int i = mapListingScroll; i < mapList.length; i++) {
-      String toStr = mapList[i].toString();
-      toStr = toStr.substring(1+toStr.lastIndexOf('\\'),toStr.lastIndexOf('.'));
-      toStr = toStr.replace("_"," ");
-      text(toStr,width/64,32*y_pos+height/3-6);
-      y_pos++;
+    if (selectedMap == null) {
+      textAlign(LEFT);
+      int y_pos = 0;
+      textSize(30);
+      fill(255);
+      selectMapSprite.draw(0,1*scale,scale);
+      selectionBackground.draw(0,height/3-32,scale);
+      displayTileNums.draw(width-displayTileNums.dat.width*scale,0,scale);
+      String tempString = "" + numTiles[0];
+      int temp = tempString.length() - 1;
+      for (int i = 0; i < tempString.length(); i++) {
+        whiteNumberSprites[tempString.charAt(i)-48].draw(width-displayTileNums.dat.width*scale-temp*16+scale*16,18*scale,scale);  
+        temp--;  
+      }
+      tempString = "" + numTiles[1];
+      temp = tempString.length() - 1;
+      for (int i = 0; i < tempString.length(); i++) {
+        whiteNumberSprites[tempString.charAt(i)-48].draw(width-displayTileNums.dat.width*scale-temp*16+scale*40,18*scale,scale);  
+        temp--;  
+      }
+      behindMapSelected.draw(0,77+mapSelected*32,scale);
+      for (int i = mapListingScroll; i < mapList.length; i++) {
+        String toStr = mapList[i].toString();
+        toStr = toStr.substring(1+toStr.lastIndexOf('\\'),toStr.lastIndexOf('.'));
+        toStr = toStr.replace("_"," ");
+        text(toStr,width/64,32*y_pos+height/3-6);
+        y_pos++;
+      }
+    } else {
+      coIcons[selectedTeams[0]].draw(92,128,scale);
+      coIcons[selectedTeams[1]].draw(92+192,128,scale);
+      teamOverlay.draw(0,0,scale);  
+      TeamCursor.draw(92+192*teamChanging,106,scale);
     }
   }
 }
 
-Map loadMap(String path) {
+Map loadMap(String path, int[] playerteams) {
   // load map 
   Map m = null;
   try {
     byte[] mapData = loadBytes(path);
-    m = new Map(mapData);
+    m = new Map(mapData,playerteams[0],playerteams[1]);
   } catch(Exception e) {
     e.printStackTrace();
   }
@@ -150,36 +175,74 @@ Map loadMap(String path) {
 
 void keyPressed() {
   if (keyCode == 'C') {m.win(1);}
-  if (m != null) {parseInput();} else {
-    //int mapListingScroll;
-    //int mapSelected;
-    if (keyCode == 'W') {
-      if (mapSelected <= 1) {
-        if (mapListingScroll == 0) {
-          mapSelected = max(0,mapSelected-1);
+  if (m != null) {
+    parseInput();
+  } else {
+    if (selectedMap == null) {
+      //int mapListingScroll;
+      //int mapSelected;
+      if (keyCode == 'W') {
+        if (mapSelected <= 1) {
+          if (mapListingScroll == 0) {
+            mapSelected = max(0,mapSelected-1);
+          } else {
+            mapListingScroll--;
+          }
         } else {
-          mapListingScroll--;
+          mapSelected--;  
         }
-      } else {
-        mapSelected--;  
-      }
-    } else if (keyCode == 'S') {
-      if (mapSelected >= 7) {
-        if (mapListingScroll == mapList.length - 8) {
-          mapSelected = max(0,mapSelected+1);
+      } else if (keyCode == 'S') {
+        if (mapSelected >= 7) {
+          if (mapListingScroll == mapList.length - 8) {
+            mapSelected = max(0,mapSelected+1);
+          } else {
+            mapListingScroll++;
+          }
         } else {
-          mapListingScroll++;
+          mapSelected = min(mapSelected+1,mapList.length-1);  
         }
-      } else {
-        mapSelected = min(mapSelected+1,mapList.length-1);  
+      } else if (keyCode == 'I') {
+        //println(mapSelected+mapListingScroll);
+        //println(mapList[mapSelected+mapListingScroll].toString());
+        selectedTeams = new int[2];
+        selectedTeams[0] = 0;
+        selectedTeams[1] = 2;
+        teamChanging = 0;
+        selectedMap = mapList[mapSelected+mapListingScroll];
       }
-    } else if (keyCode == 'I') {
-      //println(mapSelected+mapListingScroll);
-      //println(mapList[mapSelected+mapListingScroll].toString());
-      m = loadMap(mapList[mapSelected+mapListingScroll].toString());
-    }
-    if (keyCode == 'W' || keyCode == 'S') {
-      numTiles = getTileNums(loadBytes(mapList[mapSelected+mapListingScroll]));  
+      if (keyCode == 'W' || keyCode == 'S') {
+        numTiles = getTileNums(loadBytes(mapList[mapSelected+mapListingScroll]));  
+      }
+    } else {
+      if (keyCode == 'I') {
+        m = loadMap(selectedMap.toString(),selectedTeams);  
+      } else if (keyCode == 'U') {
+        selectedMap = null;  
+      } else if (keyCode == 'W') {
+        int[] temp0 = {0,2,0,1};
+        int temp2 = selectedTeams[teamChanging];
+        selectedTeams[teamChanging] = temp0[selectedTeams[teamChanging]];
+        if (selectedTeams[0] == selectedTeams[1]) {
+          selectedTeams[teamChanging] = temp0[selectedTeams[teamChanging]]; 
+          if (selectedTeams[0] == selectedTeams[1]) {
+            selectedTeams[teamChanging] = temp2;
+          }
+        }
+      } else if (keyCode == 'S') {
+        int[] temp1 = {2,3,1,3};
+        int temp3 = selectedTeams[teamChanging];
+        selectedTeams[teamChanging] = temp1[selectedTeams[teamChanging]];
+        if (selectedTeams[0] == selectedTeams[1]) {
+          selectedTeams[teamChanging] = temp1[selectedTeams[teamChanging]]; 
+          if (selectedTeams[0] == selectedTeams[1]) {
+            selectedTeams[teamChanging] = temp3;
+          }
+        }
+      } else if (keyCode == 'D' && teamChanging == 0) {
+        teamChanging++;  
+      } else if (keyCode == 'A' && teamChanging > 0) {
+        teamChanging--;
+      }
     }
   }
 }
