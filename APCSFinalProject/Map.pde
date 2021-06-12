@@ -29,6 +29,12 @@ public class Map {
   afterwards is map data according to the size given;
   */
   public Map(byte[] data) throws IOException {
+    this(data,0,2);  
+  }
+  public Map(byte[] data, int player0team, int player1team) throws IOException {
+    playerTeams = new int[2];
+    playerTeams[0] = player0team;
+    playerTeams[1] = player1team;
     c = new Cursor(false);
     whoseTurn = playerTeams[0];
     turns = 0;
