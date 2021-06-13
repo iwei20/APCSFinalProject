@@ -41,7 +41,7 @@ public class Terrain {
         drivable = true;
         ocean = false;
         defense = 0;
-        s = new Sprite("tiles/road_0.png");
+        s = new Sprite("tiles/road_" + subindex + ".png");
         movementCosts = new int[]{1,1,1,-1};
         break;
       case 4: // plains
