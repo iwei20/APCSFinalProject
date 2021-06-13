@@ -41,6 +41,9 @@ void parseInput() {
           case "Fire":
             m.combatMenu.initSelection(m.getCursor().selected, possibleAttacks);
             break;
+          case "Drop":
+            m.combatMenu.initSelection(m.getCursor().selected, possibleAttacks);
+            break;
           case "Capt":
             if (m.getTile(m.getCursor().selected.x,m.getCursor().selected.y).enactCapt()) {selectedAction = "Wait";}
             break;
@@ -78,11 +81,18 @@ void parseInput() {
           case "Fire":
             m.getCursor().selected.attack(m.combatMenu.getSelectedUnit());
             break;
+          case "Drop":
+            m.getCursor().selected.dropUnit(m.combatMenu.getSelectedUnit().x,m.combatMenu.getSelectedUnit().y);
+            selectedAction = "Fire";
+            break;
+            
         }
-        m.combatMenu.destSelection();  
-        m.getCursor().selected.setActionTaken();
-        m.getCursor().selected = null; 
-        inCombatMenu = false;
+        if (selectedAction.equals("Fire")) {
+          m.combatMenu.destSelection();  
+          m.getCursor().selected.setActionTaken();
+          m.getCursor().selected = null; 
+          inCombatMenu = false;
+        }
       }
     }
   } else if(m.pMenu != null && m.pMenu.active) {
@@ -170,10 +180,31 @@ void parseInput() {
       } else if (/*m.getCursor().selected != null && */m.getCursor().selected.team == m.whoseTurn) {
         if(m.getCursor().selected.move(m.getCursor().x,m.getCursor().y)) {
           inCombatMenu = true;
-          possibleAttacks = m.getCursor().selected.checkUnitsInRange();
-          m.combatMenu = new MenuOption(possibleAttacks.size() > 0,m.getTile(m.getCursor().selected.x,m.getCursor().selected.y).baseCanCapt(),false,false);
-          //m.getCursor().selected = null; 
-          //m.getCursor().Iactive = false;
+          if (m.getCursor().selected.carrying == null) {
+            possibleAttacks = m.getCursor().selected.checkUnitsInRange();
+            m.combatMenu = new MenuOption(possibleAttacks.size() > 0,m.getTile(m.getCursor().selected.x,m.getCursor().selected.y).baseCanCapt(),false,false);
+            //m.getCursor().selected = null; 
+            //m.getCursor().Iactive = false;
+          } else {
+            possibleAttacks = new ArrayList(4);
+            if (m.getCursor().selected.canDropUnit(m.getCursor().selected.x+1,m.getCursor().selected.y)) {
+              possibleAttacks.add(new Unit(m.getCursor().selected.x+1,m.getCursor().selected.y,m.getCursor().selected.team+1));
+            }
+            if (m.getCursor().selected.canDropUnit(m.getCursor().selected.x-1,m.getCursor().selected.y)) {
+              possibleAttacks.add(new Unit(m.getCursor().selected.x-1,m.getCursor().selected.y,m.getCursor().selected.team+1));
+            }
+            if (m.getCursor().selected.canDropUnit(m.getCursor().selected.x,m.getCursor().selected.y-1)) {
+              possibleAttacks.add(new Unit(m.getCursor().selected.x,m.getCursor().selected.y-1,m.getCursor().selected.team+1));
+            }
+            if (m.getCursor().selected.canDropUnit(m.getCursor().selected.x,m.getCursor().selected.y+1)) {
+              possibleAttacks.add(new Unit(m.getCursor().selected.x,m.getCursor().selected.y+1,m.getCursor().selected.team+1));
+            }
+            if (possibleAttacks.size() > 0) {
+              m.combatMenu = new MenuOption(new String[]{"Drop","Wait"},"GUI/DropWaitMenu.png");
+            } else {
+              m.combatMenu = new MenuOption(false,false,false,false);
+            }
+          }
         } else if ((m.getCursorY() >= 0 && m.getCursorX() >= 0 && m.getCursorY() < m.board.length && m.getCursorX() < m.board[0].length) && m.board[m.getCursor().y][m.getCursor().x].occupying != null && m.board[m.getCursor().y][m.getCursor().x].occupying.canLoadUnit(m.c.selected)){
           if (m.getCursor().selected.move(m.getCursor().x,m.getCursor().y,true)) {
             inCombatMenu = true;
