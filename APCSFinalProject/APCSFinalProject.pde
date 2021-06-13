@@ -21,6 +21,7 @@ Sprite[] captureIcons;
 Sprite[] teamIcons;
 Sprite[] teamMoneyIcons;
 Sprite[] winScreens;
+Sprite[] loadIcons;
 Sprite victorySprite;
 Sprite[] explosionFrames; 
 Sprite[] numberSprites;
@@ -48,6 +49,7 @@ void setup() {
   File directory = new File(this.dataPath("maps/"));
   mapList = directory.listFiles();
   selectedMap = null;
+  tu = null;
   numTiles = getTileNums(loadBytes(mapList[0]));
   //frameRate(5);
   size(480,320);
@@ -68,6 +70,10 @@ void setup() {
   coIcons = new Sprite[4];
   for (int i = 0; i < coIcons.length; i++) {
     coIcons[i] = new Sprite("icons/t" + i + "_co.png");  
+  }
+  loadIcons = new Sprite[4];
+  for (int i = 0; i < coIcons.length; i++) {
+    loadIcons[i] = new Sprite("icons/t" + i + "_loadicon.png");  
   }
   teamSymbols = new Sprite[4];
   for (int i = 0; i < teamSymbols.length; i++) {
