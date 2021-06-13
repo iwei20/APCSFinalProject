@@ -27,7 +27,7 @@ public class Terrain {
         drivable = true;
         ocean = false;
         defense = 0;
-        s = new Sprite("tiles/water_0.png");
+        s = new Sprite("tiles/water_" + subindex + ".png");
         movementCosts = new int[]{2,-1,-1,1};
         break;
       case 2: // horizontal road

@@ -28,10 +28,10 @@ public class Map {
   after which is enemy unit data until the second FF byte, same format
   afterwards is map data according to the size given;
   */
-  public Map(byte[] data) throws IOException {
+  public Map(byte[] data) {
     this(data,0,2);  
   }
-  public Map(byte[] data, int player0team, int player1team) throws IOException {
+  public Map(byte[] data, int player0team, int player1team) {
     playerTeams = new int[2];
     playerTeams[0] = player0team;
     playerTeams[1] = player1team;
@@ -41,25 +41,31 @@ public class Map {
     gameOver = false;
     pUnits = new ArrayList();
     eUnits = new ArrayList();
-    board = new Tile[data[0]][data[1]];
+    boolean TwoBytesPerTile = data[0] == 0;
+    board = new Tile[data[TwoBytesPerTile ? 1 : 0]][data[TwoBytesPerTile ? 2 : 1]];
     money = new int[4];
     for (int i = 0; i < money.length; i++) {money[i] = 8000;}
     
     top_view = 0;left_view = 0;
     int l;
-    for (l = 2; data[l] != -128; l += 3) {}
+    for (l = (TwoBytesPerTile ? 1 : 0) + 2; data[l] != -128; l += 3) {}
     l++;
     for (; data[l] != -128; l += 3) {}
     l++;
     for (int j = 0; j < board.length; j++) {
       for (int i = 0; i < board[j].length && l < data.length; i++) {
-        board[j][i] = new Tile(data[l], l + 1 + board.length * board[j].length < data.length ? data[l + 1 + board.length * board[j].length] : 0);
-        l++;
+        if (TwoBytesPerTile) {
+          board[j][i] = new Tile(data[l],data[l+1]);
+          l += 2;
+        } else {
+          board[j][i] = new Tile(data[l], l + 1 + board.length * board[j].length < data.length ? data[l + 1 + board.length * board[j].length] : 0);
+          l++;  
+        }
       }  
     }
     
     // Do map data first so that for Unit constructor board doesnt have any null values
-    for (l = 2; data[l] != -128; l += 3) {
+    for (l = 2 + (TwoBytesPerTile ? 1 : 0); data[l] != -128; l += 3) {
       pUnits.add(new Unit(this,data[l],data[l+1],data[l+2],playerTeams[0]));
     }
     l++;

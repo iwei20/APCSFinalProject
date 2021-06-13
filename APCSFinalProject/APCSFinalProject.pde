@@ -169,12 +169,8 @@ void draw() {
 Map loadMap(String path, int[] playerteams) {
   // load map 
   Map m = null;
-  try {
-    byte[] mapData = loadBytes(path);
-    m = new Map(mapData,playerteams[0],playerteams[1]);
-  } catch(Exception e) {
-    e.printStackTrace();
-  }
+  byte[] mapData = loadBytes(path);
+  m = new Map(mapData,playerteams[0],playerteams[1]);
   if (m != null) {m.newTurn();}
   return m;
 }
@@ -253,7 +249,7 @@ void keyPressed() {
   }
 }
 int[] getTileNums(byte[] map) {
-  int i = 2;
+  int i = 2 + (map[0] == 0 ? 1 : 0);
   int[] toReturn = new int[2];
   
   toReturn[0] = 0;
