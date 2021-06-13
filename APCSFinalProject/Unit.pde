@@ -22,6 +22,14 @@ public class Unit {
   boolean isVehicle;
   boolean navalOnly;
   
+  
+  public Unit(int init_x, int init_y, int team) {
+    this.x = init_x;
+    this.y = init_y;
+    this.lastX = -1;
+    this.lastY = -1;
+    this.team = team;
+  }
   public Unit(Map m, int init_x, int init_y, int type, int team) {
     this.x = init_x;
     this.y = init_y;
@@ -62,6 +70,8 @@ public class Unit {
     if (restore && m.getTile(x,y).base != null && m.getTile(x,y).base.team == this.team) {health = min(10,health+2);}
   }
   public void undoMove() {
+    //tt = null;
+    //tu = null;
     m.board[y][x].occupying = null;
     x = lastX;
     lastX = -1;
@@ -73,11 +83,15 @@ public class Unit {
     if (m.board[y][x].base != null) {m.board[y][x].base.capturing = this;}
   }
   public boolean move(int newX, int newY) {
-    if (stationary) {return false;}
-    if ((newX != x || newY != y) && (takenAction || !checkMvmtRange_rec(newX,newY,0,mvmtRange,true) || m.board[newY][newX].occupying != null || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length))) {
+    return move(newX,newY,false);  
+  }
+  public boolean move(int newX, int newY, boolean f) {
+    if ((newX != x || newY != y) && (takenAction || !checkMvmtRange_rec(newX,newY,0,mvmtRange,true) || (m.board[newY][newX].occupying != null && (!f || !m.board[newY][newX].occupying.canLoadUnit(this))) || (newX < 0 || newX >= m.board[0].length || newY < 0 || newY >= m.board.length))) {
       return false;
     } else {
       if (m.board[y][x].base != null && newX != x && newY != y) {m.board[y][x].base.capturing = null;}
+      tt = m.board[newY][newX];
+      tu = tt.occupying;
       m.board[y][x].occupying = null;
       this.lastX = this.x;
       this.x = newX;
@@ -102,6 +116,9 @@ public class Unit {
     m.getTile(other.x,other.y).occupying = null;
     return true;
   }
+  public void unLoadUnit() {
+    this.carrying = null;  
+  }
   public boolean canDropUnit(int x, int y) {
     return carrying != null && x >= 0 && x <= m.board[0].length && 
     y >= 0 && y <= m.board.length && m.getTile(x,y).t.movementCosts[carrying.mvmtType] != -1 &&
@@ -116,6 +133,7 @@ public class Unit {
     this.carrying = null;
     return true;
   }
+  
   public float calcPower(Unit a, Unit b) {
     if (abs(b.x-a.x) + abs(b.y-a.y) >= a.attackRangeMin && abs(b.x-a.x) + abs(b.y-a.y) <= a.attackRangeMax) {   
       /* this should do calculations */
@@ -227,7 +245,9 @@ public class Unit {
       return true;
     }
     Terrain t = m.board[ty][tx].getTerrain();
-    if (!airborne && m.board[ty][tx].occupying != null && !m.board[ty][tx].occupying.airborne) {return false;}
+    if (!airborne && m.board[ty][tx].occupying != null && !m.board[ty][tx].occupying.airborne) {
+      return false;
+    }
     if (checkAtAll) {
       if (!airborne && t.movementCosts[mvmtType] == -1) {return false;} //<>//
       steps += (airborne ?  1 : max(t.movementCosts[mvmtType] - (t.movementCosts[mvmtType] + steps > maxSteps? 1 : 0),1)); //<>//
@@ -264,6 +284,8 @@ public class Unit {
         }
         if (capturing != null) {
           captureIcons[team].draw(scale*x*16,scale*y*16+8*scale,scale,false,true);
+        } else if (carrying != null) {
+          loadIcons[team].draw(scale*x*16,scale*y*16+8*scale,scale,false,true);   
         }
       } else {
         unitExploding = true;
@@ -274,7 +296,7 @@ public class Unit {
       if (exploding >= 45) {
         //destroy unit 
         m.board[y][x].occupying = null;
-        (team == 0 ? m.pUnits : m.eUnits).remove(this);
+        (team == playerTeams[0] ? m.pUnits : m.eUnits).remove(this);
         unitExploding = false;
       } else {
         explosionFrames[exploding/5].draw(scale*(x-1)*16,scale*(y-2)*16+6*scale,scale,false,true);
