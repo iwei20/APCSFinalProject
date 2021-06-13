@@ -67,10 +67,11 @@ class MenuOption {
   
   public void initSelection(Unit attacker, ArrayList<Unit> targets) {
     unitTargets = targets;
-    unit_cursor = new Cursor(true);
+    unit_cursor = new Cursor(attacker.carrying == null);
     selectedUnit = 0;
     unit_cursor.x = targets.get(selectedUnit).x;
     unit_cursor.y = targets.get(selectedUnit).y;
+    dp = new DamagePreview(attacker,targets.get(0));
     dp.attacker = attacker;
     dp.target = targets.get(selectedUnit);
   }
@@ -101,7 +102,7 @@ class MenuOption {
       cursor.render(c_render_x,c_render_y+cursor_y*scale*16);  
     } else {
       unit_cursor.render(true,unit_cursor.x,unit_cursor.y,unitTargets.get(selectedUnit));  
-      if(dp.hasUnits()) dp.display();
+      if(dp.hasUnits() && dp.attacker.carrying == null) dp.display();
     }
   }
 }
