@@ -1,5 +1,9 @@
+import java.util.*;
+
 ArrayList<Unit> possibleAttacks = null;
 String selectedAction = null; 
+Unit tu;
+Tile tt;
 
 void parseInput() {
   if (inCombatMenu) {
@@ -14,13 +18,24 @@ void parseInput() {
       if (keyCode == 'U') {
         if (m.getCursor().selected != null) {
           m.getCursor().selected.undoMove();
+          if (tu != null && tt != null) {tt.occupying = tu;}
         }
+        tu = null;
+        tt = null;
         inCombatMenu = false;
       }
       if (keyCode == 'I') {
         selectedAction = m.combatMenu.getOption();
         switch(selectedAction) {
           case "Wait":
+            possibleAttacks = null;
+            break;
+          case "Load":
+            tu.loadUnit(m.getCursor().selected);
+            tt.occupying = tu;
+            tt = null;
+            tu = null;
+            selectedAction = "Wait";
             possibleAttacks = null;
             break;
           case "Fire":
@@ -159,6 +174,13 @@ void parseInput() {
           m.combatMenu = new MenuOption(possibleAttacks.size() > 0,m.getTile(m.getCursor().selected.x,m.getCursor().selected.y).baseCanCapt(),false,false);
           //m.getCursor().selected = null; 
           //m.getCursor().Iactive = false;
+        } else if ((m.getCursorY() >= 0 && m.getCursorX() >= 0 && m.getCursorY() < m.board.length && m.getCursorX() < m.board[0].length) && m.board[m.getCursor().y][m.getCursor().x].occupying != null && m.board[m.getCursor().y][m.getCursor().x].occupying.canLoadUnit(m.c.selected)){
+          if (m.getCursor().selected.move(m.getCursor().x,m.getCursor().y,true)) {
+            inCombatMenu = true;
+            m.combatMenu = new MenuOption(new String[]{"Load"},"GUI/LoadMenu.png");
+            //tu.loadUnit(m.getCursor().selected);
+            //m.getTile(m.getCursorX(),m.getCursorY()).occupying = tu;
+          }
         }
       }
     }
