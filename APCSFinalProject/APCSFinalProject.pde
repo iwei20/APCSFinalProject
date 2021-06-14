@@ -176,7 +176,7 @@ Map loadMap(String path, int[] playerteams) {
 }
 
 void keyPressed() {
-  if (keyCode == 'C') {m.win(1);}
+  //if (keyCode == 'C') {m.win(1);}
   if (m != null) {
     parseInput();
   } else {
