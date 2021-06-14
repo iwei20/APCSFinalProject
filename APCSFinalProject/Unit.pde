@@ -126,7 +126,7 @@ public class Unit {
   }
   public boolean dropUnit(int x, int y) {
     if (!canDropUnit(x,y)) {return false;}
-    m.getTile(x,y).occupying = this.carrying;
+    try {m.getTile(x,y).occupying = this.carrying;} catch (Exception e) {e.printStackTrace();}
     this.carrying.setActionTaken();
     this.carrying.x = x;
     this.carrying.y = y;

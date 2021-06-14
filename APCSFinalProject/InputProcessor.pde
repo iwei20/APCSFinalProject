@@ -187,16 +187,16 @@ void parseInput() {
             //m.getCursor().Iactive = false;
           } else {
             possibleAttacks = new ArrayList(4);
-            if (m.getCursor().selected.canDropUnit(m.getCursor().selected.x+1,m.getCursor().selected.y)) {
+            if (m.getCursor().selected.x < m.board[0].length - 1 && m.getCursor().selected.canDropUnit(m.getCursor().selected.x+1,m.getCursor().selected.y)) {
               possibleAttacks.add(new Unit(m.getCursor().selected.x+1,m.getCursor().selected.y,m.getCursor().selected.team+1));
             }
-            if (m.getCursor().selected.canDropUnit(m.getCursor().selected.x-1,m.getCursor().selected.y)) {
+            if (m.getCursor().selected.x >= 1 && m.getCursor().selected.canDropUnit(m.getCursor().selected.x-1,m.getCursor().selected.y)) {
               possibleAttacks.add(new Unit(m.getCursor().selected.x-1,m.getCursor().selected.y,m.getCursor().selected.team+1));
             }
-            if (m.getCursor().selected.canDropUnit(m.getCursor().selected.x,m.getCursor().selected.y-1)) {
+            if (m.getCursor().selected.y >= 1 && m.getCursor().selected.canDropUnit(m.getCursor().selected.x,m.getCursor().selected.y-1)) {
               possibleAttacks.add(new Unit(m.getCursor().selected.x,m.getCursor().selected.y-1,m.getCursor().selected.team+1));
             }
-            if (m.getCursor().selected.canDropUnit(m.getCursor().selected.x,m.getCursor().selected.y+1)) {
+            if (m.getCursor().selected.y < m.board.length - 1 && m.getCursor().selected.canDropUnit(m.getCursor().selected.x,m.getCursor().selected.y+1)) {
               possibleAttacks.add(new Unit(m.getCursor().selected.x,m.getCursor().selected.y+1,m.getCursor().selected.team+1));
             }
             if (possibleAttacks.size() > 0) {
