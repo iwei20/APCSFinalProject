@@ -9,10 +9,16 @@ public class Tile {
     occupying = null;
     base = null;
     if (type >= 8 && type <= 12) {
-      base = new Captureable(type == 8 ? -1 : playerTeams[(type - 9) % 2],type >= 11,false);    
+      base = new Captureable(type == 8 ? -1 : playerTeams[(type - 9) % 2],type >= 11);    
     }
     if (type >= 13 && type <= 15) {
-      base = new Captureable(type == 13 ? -1 : playerTeams[type-14],false,true);  
+      base = new Captureable(type == 13 ? -1 : playerTeams[type-14],Port.GROUND);  
+    }
+    if (type >= 16 && type <= 18) {
+      base = new Captureable(type == 16 ? -1 : playerTeams[type-17],Port.SEA);  
+    }
+    if (type >= 19 && type <= 21) {
+      base = new Captureable(type == 19 ? -1 : playerTeams[type-20],Port.AIR);  
     }
   }
   

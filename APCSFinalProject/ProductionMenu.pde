@@ -24,6 +24,7 @@ class ProductionMenu {
     target_y = 0;
     options = new ArrayList();
     mc = new MenuCursor();
+    top_index = 0;
     
     BufferedReader br = createReader(path);
     String line = null;
@@ -99,23 +100,23 @@ class ProductionMenu {
        fill(0, 0, 0);
        text("$" + m.money[m.whoseTurn], LEFT_X + 10, TOP_Y - 15);
        // Calculate later
-       for(int i = 0; i < options.size(); ++i) {
-         if(40 * i <= HEIGHT) {
-           if(m.money[m.whoseTurn] >= options.get(i).cost) {
-             options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 10 + 40 * i, 2);
+       for(int i = 0; i < min(options.size(), 6); ++i) {
+         if(TOP_Y - 30 + 40 * i <= HEIGHT) {
+           if(m.money[m.whoseTurn] >= options.get(i + top_index).cost) {
+             options.get(i + top_index).unit.draw(LEFT_X + 10, TOP_Y + 10 + 40 * i, 2);
              fill(0, 0, 0);
            } else {
-             options.get(i).unit.draw(LEFT_X + 10, TOP_Y + 10 + 40 * i, 2, false, 0.8, false);
+             options.get(i + top_index).unit.draw(LEFT_X + 10, TOP_Y + 10 + 40 * i, 2, false, 0.8, false);
              fill(128, 128, 128);
            }
            textAlign(LEFT);
            textSize(28);
-           text(options.get(i).name, LEFT_X + 50, TOP_Y + 33 + 40 * i);
+           text(options.get(i + top_index).name, LEFT_X + 50, TOP_Y + 33 + 40 * i);
            textAlign(RIGHT);
            textSize(24);
-           text(options.get(i).cost, LEFT_X + WIDTH - 10, TOP_Y + 33 + 40 * i);
+           text(options.get(i + top_index).cost, LEFT_X + WIDTH - 10, TOP_Y + 33 + 40 * i);
          }
-         if(i == curr_mc_index) {
+         if(i + top_index == curr_mc_index) {
            mc.render(LEFT_X - 20, TOP_Y + 15 + 40 * i);
          }
        }

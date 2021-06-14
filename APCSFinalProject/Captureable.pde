@@ -1,3 +1,15 @@
+public enum Port {
+  GROUND("ground.dat", "Base.png"),
+  SEA("sea.dat", "Seaport.png"),
+  AIR("air.dat", "Airport.png");
+  
+  String prod_data_path, sprite_path;
+  private Port(String prod_data_path, String sprite_path) {
+    this.prod_data_path = prod_data_path;
+    this.sprite_path = sprite_path;
+  }
+}
+
 public class Captureable {
   int hp;
   int team; 
@@ -6,15 +18,28 @@ public class Captureable {
   boolean hasProduced;
   Unit capturing;
   Sprite s;
+  Port type;
   
-  public Captureable(int t, boolean ishq, boolean canProduce) {
+  public Captureable(int t, boolean ishq) {
     hp = 20;
     team = t;
     capturing = null;
     critical = ishq;
     String c = t == -1 ? "Neutral" : getTeamColor(t);
-    s = new Sprite("tiles/" + c + (ishq ? "HQ.png" : (canProduce ? "Base.png" : "City.png")));
-    this.canProduce = canProduce;
+    s = new Sprite("tiles/" + c + (ishq ? "HQ.png" : "City.png"));
+    canProduce = false;
+    hasProduced = false;
+  }
+  
+  public Captureable(int t, Port prodType) {
+    hp = 20;
+    team = t;
+    capturing = null;
+    critical = false;
+    String c = t == -1 ? "Neutral" : getTeamColor(t);
+    this.type = prodType;
+    s = new Sprite("tiles/" + c + type.sprite_path, type == Port.GROUND ? color(255,85,255) : color(0, 0, 0));
+    canProduce = true;
     hasProduced = false;
   }
   public void shallowCopy(Captureable a, Captureable b) {
@@ -29,7 +54,7 @@ public class Captureable {
     // Open production menu
     if(canProduce && !hasProduced) {
       try {
-        m.pMenu = new ProductionMenu("ProductionChart.dat");
+        m.pMenu = new ProductionMenu("production/" + type.prod_data_path);
       } catch(Exception e) {
         e.printStackTrace();
       }
@@ -47,7 +72,7 @@ public class Captureable {
     capturing = u;
     hp -= ceil(u.health);
     if (hp <= 0) {
-      Captureable c = new Captureable(u.team,critical, canProduce);
+      Captureable c = new Captureable(u.team,critical);
       if (critical) {m.win(u.team == playerTeams[0] ? 0 : 1);}
       shallowCopy(c,this);
       u.capturing = null;

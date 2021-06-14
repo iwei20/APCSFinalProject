@@ -38,7 +38,7 @@ void parseInput() {
             selectedAction = "Wait";
             possibleAttacks = null;
             break;
-          case "Fire":
+          case "Fire": //<>//
             m.combatMenu.initSelection(m.getCursor().selected, possibleAttacks);
             break;
           case "Drop":
@@ -104,15 +104,19 @@ void parseInput() {
       m.pMenu.active = false;
     }
     if (keyCode == 'W') {
-      m.pMenu.curr_mc_index--;
-      if(m.pMenu.curr_mc_index < 0) {
-        m.pMenu.curr_mc_index = m.pMenu.options.size() - 1;
+      if(m.pMenu.curr_mc_index > 0) {
+        m.pMenu.curr_mc_index--;
+        if(m.pMenu.curr_mc_index < m.pMenu.top_index) {
+          m.pMenu.top_index--;
+        }
       }
     }
     if (keyCode == 'S') {
-      m.pMenu.curr_mc_index++;
-      if(m.pMenu.curr_mc_index >= m.pMenu.options.size() ) {
-        m.pMenu.curr_mc_index = 0;
+      if(m.pMenu.curr_mc_index < m.pMenu.options.size() - 1) {
+        m.pMenu.curr_mc_index++;
+        if(m.pMenu.curr_mc_index > m.pMenu.top_index + 4) {
+          m.pMenu.top_index++;
+        }
       }
     }
   } else if (!unitExploding){

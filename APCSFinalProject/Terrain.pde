@@ -98,6 +98,23 @@ public class Terrain {
         s = new Sprite("tiles/GrayBase.png");
         movementCosts = new int[]{1,1,1,-1};
         break;
+      case 16:
+      case 17:
+      case 18: // Gray seaport
+        drivable = false;
+        ocean = true;
+        defense = 3;
+        s = new Sprite("tiles/GraySeaport.png");
+        movementCosts = new int[] {-1, -1, -1, 1};
+        break;
+      case 19:
+      case 20:
+      case 21:
+        drivable = true;
+        ocean = false;
+        defense = 3;
+        s = new Sprite("tiles/GrayAirport.png");
+        movementCosts = new int[]{1,1,1,-1};
     }
   }
 }
