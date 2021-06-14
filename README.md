@@ -37,3 +37,7 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 ### 6/10/2021
 - Ivan - Quickly implement sub-sprite variations and tested it with a water edge tile
 - Cameron - Created entire main selection menu and graphics, started code for transport units
+### 6/12/2021
+- Cameron - implemented loading and dropping units 
+### 6/13/2021
+- Cameron - updated maps to include nicer water and road tiles
