@@ -41,3 +41,5 @@ Controls are WASD to move the cursor, I to select unit/action and U to go back (
 - Cameron - implemented loading and dropping units 
 ### 6/13/2021
 - Cameron - updated maps to include nicer water and road tiles
+### 6/14/2021
+- Ivan - Add all port textures, implement all port types and have all units, implement production scrolling, add an airport to Volcano Island
